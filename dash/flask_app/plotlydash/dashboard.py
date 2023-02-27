@@ -28,11 +28,11 @@ import json
 from textwrap import dedent
 
 # Importing dataset
-DATAFRAME = pd.read_csv('datasets/example_data.csv')
+DATAFRAME = pd.read_csv('datasets/Faostat_Data.csv')
 
 # Insert data cleaning here
-COUNTRIES = sorted(DATAFRAME['Country'].unique())
-YEARS = sorted(DATAFRAME['Year'].unique())
+COUNTRIES = sorted(DATAFRAME['country'].unique())
+YEARS = sorted(DATAFRAME['year'].unique())
 
 METASET = 'datasets/metadata/'
 METADATA_SOURCES = {
@@ -66,7 +66,7 @@ def init_dashboard(server):
             
     dash_app = dash.Dash(__name__,
         server=server,
-        title='Template Dashboard',
+        title='FAOSTAT Visualizer Prototype',
         routes_pathname_prefix="/dash/",
         external_stylesheets=[
             # 'https://codepen.io/chriddyp/pen/bWLwgP.css',
@@ -273,31 +273,21 @@ def init_callbacks(dash_app):
     def create_graph(country, year):
         
         # Filtering the dataframe to only include specific years/countries
-        year_list = []
-        y_value = year[0]
-        y_max = year[-1]
-        while y_value <= y_max:
-            year_list.append(y_value)
-            y_value += 1
         
-        df = filterdf(country,'Country',DATAFRAME)
-        df = filterdf(year_list,'Year',df)
+        df = filterdf(country,'country',DATAFRAME)
         
+        df = df[df['species'] == "Chickens"] #only use the species given by user
+        
+        df['colours'] = ['red' if fl == ' ' else 'blue' if fl == 'F' else 'green' if fl == 'Im' else 'orange' for fl in df['flag']]
 
         # Creating graph
-        fig_title = \
-            f'Percentage of Laying Hens by '+\
-            f'Production System '+\
-            f'{"in All Countries" if country is None or len(country) == 0 else "in " + ",".join(df["Country"].unique())}'
+        #fig_title = \
+        #    f'Percentage of Laying Hens by '+\
+        #    f'Production System '+\
+        #    f'{"in All Countries" if country is None or len(country) == 0 else "in " + ",".join(df["country"].unique())}'
 
-        fig = px.line(
-            df, 
-            x='Year',
-            y='Total',
-            color='Country',
-            title=fig_title,
-            color_discrete_sequence=px.colors.qualitative.Dark24,
-        )
+        fig = go.Figure() #Initialize plot
+        fig.add_trace(go.Scatter(x=df['year'], y=df['population'], mode='lines+markers', name='lines', marker=dict(color=df['colours']), line=dict(color='black')))
         
         fig.update_layout(
             margin={"r":10,"t":45,"l":10,"b":10},
@@ -317,29 +307,29 @@ def init_callbacks(dash_app):
         Input('options-countries-b', 'value'),
         Input('options-year-b', 'value'),
     )
-    def render_table(country,year):
+    #def render_table(country,year):
         
         # Filtering the dataframe to only include specific years/countries
-        year_list = []
-        y_value = year[0]
-        y_max = year[-1]
-        while y_value <= y_max:
-            year_list.append(y_value)
-            y_value += 1
-
-        df = filterdf(country,'Country',DATAFRAME)        
-        df = filterdf(year_list,'Year',df)
-
-
+    #    year_list = []
+    #    y_value = year[0]
+    #    y_max = year[-1]
+    #    while y_value <= y_max:
+    #        year_list.append(y_value)
+    #        y_value += 1
+    #
+    #    df = filterdf(country,'Country',DATAFRAME)        
+    #    df = filterdf(year_list,'Year',df)
+    #
+    #  
         # Rendering the data table
-        cols = [{"name": i, "id": i,"hideable":True} for i in df.columns]
-        cols[0] = {"name": "ID", "id": cols[0]["id"],"hideable":True}
-        datatable = dash_table.DataTable(
-            data=df.to_dict('records'),
-            columns=cols,
-            export_format="csv",
-        )
-        return datatable
+     #   cols = [{"name": i, "id": i,"hideable":True} for i in df.columns]
+    #    cols[0] = {"name": "ID", "id": cols[0]["id"],"hideable":True}
+     #   datatable = dash_table.DataTable(
+    #        data=df.to_dict('records'),
+     #       columns=cols,
+    #        export_format="csv",
+    #    )
+     #   return datatable
 
 
     # Updating Alert
