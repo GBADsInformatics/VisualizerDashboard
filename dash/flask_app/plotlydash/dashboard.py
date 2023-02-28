@@ -32,6 +32,7 @@ DATAFRAME = pd.read_csv('datasets/Faostat_Data.csv')
 
 # Insert data cleaning here
 COUNTRIES = sorted(DATAFRAME['country'].unique())
+SPECIES = sorted(DATAFRAME['species'].unique())
 YEARS = sorted(DATAFRAME['year'].unique())
 
 METASET = 'datasets/metadata/'
@@ -215,68 +216,27 @@ def init_callbacks(dash_app):
     # Init dropdowns
     @dash_app.callback(
         Output('options-countries-a', 'options'),
-        Output('options-countries-b', 'options'),
-        Output('year-container-a', 'children'),
-        Output('year-container-b', 'children'),
+        #Output('options-countries-b', 'options'),
+        Output('options-species-a', 'options'),
+        #Output('year-container-b', 'children'),
         Input('dummy_div', 'children'),
     )
     def dropdown_options(_a):
-        year1 = [
-            html.H5("Year",style={"margin":"0.4rem 0 0.2rem 0"}),
-            html.Div(
-                className='year-slider-container',
-                children=[
-                    dcc.RangeSlider(
-                        step=1, 
-                        min=YEARS[0],
-                        max=YEARS[-1],
-                        value=[YEARS[0], YEARS[-1]],
-                        marks=None,
-                        id='options-year-a',
-                        className='year-slider',
-                        tooltip={"placement": "top", "always_visible": True},
-                        dots=True,
-                    )
-                ]
-            ),
-        ]
-        year2 = [
-            html.H5("Year",style={"margin":"0.4rem 0 0.2rem 0"}),
-            html.Div(
-                className='year-slider-container',
-                children=[
-                    dcc.RangeSlider(
-                        step=1, 
-                        min=YEARS[0],
-                        max=YEARS[-1],
-                        value=[YEARS[0], YEARS[-1]],
-                        marks=None,
-                        id='options-year-b',
-                        className='year-slider',
-                        tooltip={"placement": "top", "always_visible": True},
-                        dots=True,
-                    )
-                ]
-            ),
-        ]
-
         # Creating year slider
-        return COUNTRIES,COUNTRIES,\
-            year1,year2
+        return COUNTRIES,SPECIES
 
     # Displaying graph
     @dash_app.callback(
         Output('graph-container', 'children'),
         Input('options-countries-a', 'value'),
-        Input('options-year-a', 'value'),
+        Input('options-species-a', 'value')
     )
-    def create_graph(country, year):
+    def create_graph(country, species):
         
         # Filtering the dataframe to only include specific years/countries
         
         df = filterdf(country,'country',DATAFRAME)
-        
-        df = df[df['species'] == "Chickens"] #only use the species given by user
+        df = df[df['species'] == species] #only use the species given by user
         
         df['colours'] = ['red' if fl == ' ' else 'blue' if fl == 'F' else 'green' if fl == 'Im' else 'orange' for fl in df['flag']]
 
@@ -288,10 +248,10 @@ def init_callbacks(dash_app):
 
         fig = go.Figure() #Initialize plot
         fig.add_trace(go.Scatter(x=df['year'], y=df['population'], mode='lines+markers', name='lines', marker=dict(color=df['colours']), line=dict(color='black')))
-        if(country is not None):
-            plotTitle = "Chickens Population by Year in " + country
+        if(country is not None and species is not None):
+            plotTitle = species + " Population by Year in " + country
         else:
-            plotTitle = "Chickens Population by Year"
+            plotTitle = " "
         fig.update_layout(title=plotTitle)
         fig.update_layout(
             margin={"r":10,"t":45,"l":10,"b":10},
@@ -309,7 +269,7 @@ def init_callbacks(dash_app):
     @dash_app.callback(
         Output('data-table-container','children'),
         Input('options-countries-b', 'value'),
-        Input('options-year-b', 'value'),
+        #Input('options-year-b', 'value'),
     )
     #def render_table(country,year):
         
@@ -340,9 +300,8 @@ def init_callbacks(dash_app):
     @dash_app.callback(
         Output('alert-container','children'),
         Input('options-countries-a', 'value'),
-        Input('options-year-a', 'value'),
     )
-    def render_alert(country,year):
+    def render_alert(country):
         amsg = None
 
         # ADD LOGIC HERE TO CREATE ALERT MESSAGES

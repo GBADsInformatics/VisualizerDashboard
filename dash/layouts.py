@@ -71,25 +71,15 @@ page_1 = html.Div([
                                                     id='options-countries-a',
                                                     clearable=False,
                                                     multi=False,
-                                                ),
-                                                html.Div(
-                                                    id='year-container-a',
+                                                ),html.Div(
+                                                    id='species-container',
                                                     children=[
-                                                        html.H5("Year",style={"margin":"0.4rem 0 0.2rem 0"}),
-                                                        html.Div(
-                                                            className='year-slider-container',
-                                                            children=[
-                                                                dcc.RangeSlider(
-                                                                    step=1, 
-                                                                    marks=None,
-                                                                    value=[0,0],
-                                                                    id='options-year-a',
-                                                                    className='year-slider',
-                                                                    tooltip={"placement": "top", "always_visible": True},
-                                                                    dots=True,
-                                                                )
-                                                            ]
-                                                        ),
+                                                        html.H5("Species",style={"margin":"0.4rem 0 0.2rem 0"}),
+                                                        dcc.Dropdown(
+                                                            id='options-species-a',
+                                                            clearable=False,
+                                                            multi=False,
+                                                        )
                                                     ],
                                                 ),
                                                 html.Div(
