@@ -56,12 +56,6 @@ page_1 = html.Div([
                     selected_style=selectedTabStyle,
                     children=[
                         html.Div(
-                            className='tab-section',
-                            children=[
-                                html.P('This section is to explain the purpose of your dashboard and what kind of data could be interpreted from it.',style={'margin-bottom':'0'})
-                            ]
-                        ),
-                        html.Div(
                             className='tab-section-flex-container',
                             children=[
                                 html.Div(
@@ -76,7 +70,7 @@ page_1 = html.Div([
                                                 dcc.Dropdown(
                                                     id='options-countries-a',
                                                     clearable=False,
-                                                    multi=True,
+                                                    multi=False,
                                                 ),
                                                 html.Div(
                                                     id='year-container-a',

@@ -288,7 +288,11 @@ def init_callbacks(dash_app):
 
         fig = go.Figure() #Initialize plot
         fig.add_trace(go.Scatter(x=df['year'], y=df['population'], mode='lines+markers', name='lines', marker=dict(color=df['colours']), line=dict(color='black')))
-        
+        if(country is not None):
+            plotTitle = "Chickens Population by Year in " + country
+        else:
+            plotTitle = "Chickens Population by Year"
+        fig.update_layout(title=plotTitle)
         fig.update_layout(
             margin={"r":10,"t":45,"l":10,"b":10},
             font=dict(
