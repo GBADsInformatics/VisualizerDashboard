@@ -121,7 +121,6 @@ page_1 = html.Div([
                                     className='tab-section data-options',
                                     children=[
                                         html.Div(
-                                            id='options-container',
                                             children=[
                                                 html.H4("Options",style={"text-align":"center"}),
                                                 html.Hr(),
@@ -129,11 +128,16 @@ page_1 = html.Div([
                                                 dcc.Dropdown(
                                                     id='options-countries-b',
                                                     clearable=False,
-                                                    multi=True,
-                                                ),
-                                                html.Div(
-                                                    id='year-container-b',
+                                                    multi=False,
+                                                ),html.Div(
+                                                    id='species-container-b',
                                                     children=[
+                                                        html.H5("Species",style={"margin":"0.4rem 0 0.2rem 0"}),
+                                                        dcc.Dropdown(
+                                                            id='options-species-b',
+                                                            clearable=False,
+                                                            multi=False,
+                                                        )
                                                     ],
                                                 ),
                                             ]

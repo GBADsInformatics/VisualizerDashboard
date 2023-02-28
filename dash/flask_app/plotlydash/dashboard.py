@@ -33,7 +33,6 @@ DATAFRAME = pd.read_csv('datasets/Faostat_Data.csv')
 # Insert data cleaning here
 COUNTRIES = sorted(DATAFRAME['country'].unique())
 SPECIES = sorted(DATAFRAME['species'].unique())
-YEARS = sorted(DATAFRAME['year'].unique())
 
 METASET = 'datasets/metadata/'
 METADATA_SOURCES = {
@@ -177,9 +176,9 @@ def init_callbacks(dash_app):
         return layout
 
 
-    ##################################
-    # Laying Hens Specific Callbacks #
-    ##################################
+    #################################
+    # Visualizer Specific Callbacks #
+    #################################
 
     # Update stored options
     @dash_app.callback(
@@ -187,43 +186,42 @@ def init_callbacks(dash_app):
         [State('tabs', 'value')],
         Input('options-countries-a', 'value'),
         Input('options-countries-b', 'value'),
-        Input('options-year-a', 'value'),
-        Input('options-year-b', 'value'),
+        Input('options-species-a', 'value'),
+        Input('options-species-b', 'value'),
     )
     def update_stored_options_a(tab, drop1a, drop1b, drop2a, drop2b):
         if tab == 'tab-2':
-            return {'options-country':drop1b,'options-year':drop2b}
+            return {'options-country':drop1b,'options-species':drop2b}
         else:
-            return {'options-country':drop1a,'options-year':drop2a}
+            return {'options-country':drop1a,'options-species':drop2a}
 
 
     # Update options values on changing tab
     @dash_app.callback(
         Output('options-countries-a', 'value'),
         Output('options-countries-b', 'value'),
-        Output('options-year-a', 'value'),
-        Output('options-year-b', 'value'),
+        Output('options-species-a', 'value'),
+        Output('options-species-b', 'value'),
         [Input('tabs', 'value')],
         State('stored-options', 'data'),
     )
     def options_on_tab_change(selected_tab,stored_options):
         if stored_options is None:
-            return None, None, [YEARS[0], YEARS[-1]], [YEARS[0], YEARS[-1]]
-        return stored_options['options-country'],stored_options['options-country'],\
-            stored_options['options-year'],stored_options['options-year']
+            return None, None, None, None
+        return stored_options['options-country'],stored_options['options-country'], stored_options['options-species'], stored_options['options-species'] 
 
 
     # Init dropdowns
     @dash_app.callback(
         Output('options-countries-a', 'options'),
-        #Output('options-countries-b', 'options'),
+        Output('options-countries-b', 'options'),
         Output('options-species-a', 'options'),
-        #Output('year-container-b', 'children'),
+        Output('options-species-b', 'options'),
         Input('dummy_div', 'children'),
     )
     def dropdown_options(_a):
-        # Creating year slider
-        return COUNTRIES,SPECIES
+        # Return applicable options
+        return COUNTRIES,COUNTRIES,SPECIES,SPECIES
 
     # Displaying graph
     @dash_app.callback(
@@ -233,18 +231,15 @@ def init_callbacks(dash_app):
     )
     def create_graph(country, species):
         
-        # Filtering the dataframe to only include specific years/countries
+        # Filtering the dataframe to only include specific species/countries
         
         df = filterdf(country,'country',DATAFRAME)
-        df = df[df['species'] == species] #only use the species given by user
+        df = filterdf(species,'species',df) #only use the species given by user
+
+        #ensure years are in proper order
+        df = df.sort_values("year")  
         
         df['colours'] = ['red' if fl == ' ' else 'blue' if fl == 'F' else 'green' if fl == 'Im' else 'orange' for fl in df['flag']]
-
-        # Creating graph
-        #fig_title = \
-        #    f'Percentage of Laying Hens by '+\
-        #    f'Production System '+\
-        #    f'{"in All Countries" if country is None or len(country) == 0 else "in " + ",".join(df["country"].unique())}'
 
         fig = go.Figure() #Initialize plot
         fig.add_trace(go.Scatter(x=df['year'], y=df['population'], mode='lines+markers', name='lines', marker=dict(color=df['colours']), line=dict(color='black')))
@@ -269,31 +264,26 @@ def init_callbacks(dash_app):
     @dash_app.callback(
         Output('data-table-container','children'),
         Input('options-countries-b', 'value'),
-        #Input('options-year-b', 'value'),
+        Input('options-species-b', 'value')
     )
-    #def render_table(country,year):
+    def render_table(country,species):
         
-        # Filtering the dataframe to only include specific years/countries
-    #    year_list = []
-    #    y_value = year[0]
-    #    y_max = year[-1]
-    #    while y_value <= y_max:
-    #        year_list.append(y_value)
-    #        y_value += 1
-    #
-    #    df = filterdf(country,'Country',DATAFRAME)        
-    #    df = filterdf(year_list,'Year',df)
-    #
-    #  
+        # Filtering the dataframe to only include specific species/countries
+        df = filterdf(country,'country',DATAFRAME)        
+        df = filterdf(species,'species',df)
+
+        #ensure years are in proper order
+        df = df.sort_values("year")  
+    
         # Rendering the data table
-     #   cols = [{"name": i, "id": i,"hideable":True} for i in df.columns]
-    #    cols[0] = {"name": "ID", "id": cols[0]["id"],"hideable":True}
-     #   datatable = dash_table.DataTable(
-    #        data=df.to_dict('records'),
-     #       columns=cols,
-    #        export_format="csv",
-    #    )
-     #   return datatable
+        cols = [{"name": i, "id": i,"hideable":True} for i in df.columns]
+        cols[0] = {"name": "ID", "id": cols[0]["id"],"hideable":True}
+        datatable = dash_table.DataTable(
+            data=df.to_dict('records'),
+            columns=cols,
+            export_format="csv",
+        )
+        return datatable
 
 
     # Updating Alert
