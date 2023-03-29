@@ -16,7 +16,7 @@ Start the application
   python3 wsgi.py
 ```
 
-  
+ 
 ## Author
 - [@Joshua](https://github.com/josh894)
   
