@@ -239,10 +239,22 @@ def init_callbacks(dash_app):
         #ensure years are in proper order
         df = df.sort_values("year")  
         
-        df['colours'] = ['red' if fl == ' ' else 'blue' if fl == 'F' else 'green' if fl == 'Im' else 'orange' for fl in df['flag']]
+        df['colours'] = ['blue' if fl == ' ' else 'green' if fl == 'F' else 'orange' if fl == 'Im' else 'red' for fl in df['flag']]
 
-        fig = go.Figure() #Initialize plot
+        #fig = go.Figure() #Initialize plot
+        #fig.add_trace(go.Scatter(x=df['year'], y=df['population'], mode='lines+markers', name='lines', marker=dict(color=df['colours']), line=dict(color='black')))
+        colors = ['blue', 'green', 'orange', 'red']
+        labels = ['Official', 'Forecast Value', 'Imputed', 'Unofficial']
+
+        fig = go.Figure()
         fig.add_trace(go.Scatter(x=df['year'], y=df['population'], mode='lines+markers', name='lines', marker=dict(color=df['colours']), line=dict(color='black')))
+
+        for color, label in zip(colors, labels):
+            fig.add_trace(go.Scatter(x=[None], y=[None], mode='markers', marker=dict(size=10, color=color), showlegend=True, legendgroup=color, name=label))
+
+        
+        
+        
         if(country is not None and species is not None):
             plotTitle = species + " Population by Year in " + country
         else:
