@@ -6,7 +6,7 @@ This dashboard was created ontop of the [GBADS Dashboard Template](https://githu
 ## Build and Run Locally
 ```bash
   git clone https://github.com/GBADsInformatics/VisualizerDashboard
-  cd dash
+  cd VisualizerDashboard/dash
   pip3 install -r requirements.txt
 ```
 
