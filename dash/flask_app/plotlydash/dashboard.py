@@ -261,6 +261,12 @@ def init_callbacks(dash_app):
         
         #Alter graph output if user has made selections through the dash
         if(country is not None and species is not None):
+
+            #TODO
+            # -Prevent graph from being loaded before anything is selected
+            # -Provide list of graphs that go over a certain threshold %
+            # -
+            
             if df.empty:
                 plotTitle = species + " Population by Year in " + country + " is an Empty Dataset"
                 graphDesc = "Warning: " + species + " Population by Year in " + country + " is an Empty Dataset"
@@ -290,13 +296,13 @@ def init_callbacks(dash_app):
                 highest = max(fValue,oValue,uValue,iValue)
                 
                 if fValue == highest:
-                    graphDesc = graphDesc + "There is " +  f"{fValue:.2f}%" + " Forecasted Values."
+                    graphDesc = graphDesc + " " +  f"{fValue:.2f}%" + " consists of Forecasted Values."
                 elif oValue == highest:
-                    graphDesc = graphDesc + "There is " +  f"{oValue:.2f}%" + " Official Values."
+                    graphDesc = graphDesc + " " +  f"{fValue:.2f}%" + " consists of Official Values."
                 elif uValue == highest:
-                    graphDesc = graphDesc + "There is " +  f"{uValue:.2f}%" + " Unofficial Values."
+                    graphDesc = graphDesc + " " +  f"{fValue:.2f}%" + " consists of Unofficial Values."
                 else:
-                    graphDesc = graphDesc + "There is " +  f"{iValue:.2f}%" + " Imputed Values."
+                    graphDesc = graphDesc + " " +  f"{fValue:.2f}%" + " consists of Imputed Values."
         else:
             plotTitle = " "
         fig.update_layout(title=plotTitle)
