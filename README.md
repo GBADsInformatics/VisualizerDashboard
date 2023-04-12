@@ -14,6 +14,8 @@ Start the application
 
 ```bash
   python3 wsgi.py
+  OR
+  python wsgi.py
 ```
 
  
