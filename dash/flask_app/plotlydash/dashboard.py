@@ -253,12 +253,13 @@ def init_callbacks(dash_app):
         fig = go.Figure() #Initialize plot
         fig.add_trace(go.Scatter(x=df['year'], y=df['population'], mode='lines+markers', name='lines', marker=dict(color=df['colours']), line=dict(color='black')))
 
+        # Adding colours for legend
         for color, label in zip(colors, labels):
             fig.add_trace(go.Scatter(x=[None], y=[None], mode='markers', marker=dict(size=10, color=color), showlegend=True, legendgroup=color, name=label))
 
         
         
-        
+        #Alter graph output if user has made selections through the dash
         if(country is not None and species is not None):
             if df.empty:
                 plotTitle = species + " Population by Year in " + country + " is an Empty Dataset"
