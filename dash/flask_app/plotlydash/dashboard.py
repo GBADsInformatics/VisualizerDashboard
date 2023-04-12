@@ -289,13 +289,13 @@ def init_callbacks(dash_app):
                 highest = max(fValue,oValue,uValue,iValue)
                 
                 if fValue == highest:
-                    graphDesc = graphDesc + "There is " +  f"{fValue:.2f}%" + " Forecasted values"
+                    graphDesc = graphDesc + "There is " +  f"{fValue:.2f}%" + " Forecasted Values."
                 elif oValue == highest:
-                    graphDesc = graphDesc + "There is " +  f"{oValue:.2f}%" + " Official values"
+                    graphDesc = graphDesc + "There is " +  f"{oValue:.2f}%" + " Official Values."
                 elif uValue == highest:
-                    graphDesc = graphDesc + "There is " +  f"{uValue:.2f}%" + " Unofficial values"
+                    graphDesc = graphDesc + "There is " +  f"{uValue:.2f}%" + " Unofficial Values."
                 else:
-                    graphDesc = graphDesc + "There is " +  f"{iValue:.2f}%" + " Imputed values"
+                    graphDesc = graphDesc + "There is " +  f"{iValue:.2f}%" + " Imputed Values."
         else:
             plotTitle = " "
         fig.update_layout(title=plotTitle)
