@@ -226,11 +226,16 @@ def init_callbacks(dash_app):
     # Displaying graph
     @dash_app.callback(
         Output('graph-container', 'children'),
+        Output('graphDesc', 'children'),
         Input('options-countries-a', 'value'),
         Input('options-species-a', 'value')
     )
     def create_graph(country, species):
         
+        # Declare descriptor string
+        graphDesc = ""
+
+
         # Filtering the dataframe to only include specific species/countries
         
         df = filterdf(country,'country',DATAFRAME)
@@ -238,15 +243,14 @@ def init_callbacks(dash_app):
 
         #ensure years are in proper order
         df = df.sort_values("year")  
+        fig = None
         
         df['colours'] = ['blue' if fl == ' ' else 'green' if fl == 'F' else 'orange' if fl == 'Im' else 'red' for fl in df['flag']]
 
-        #fig = go.Figure() #Initialize plot
-        #fig.add_trace(go.Scatter(x=df['year'], y=df['population'], mode='lines+markers', name='lines', marker=dict(color=df['colours']), line=dict(color='black')))
         colors = ['blue', 'green', 'orange', 'red']
         labels = ['Official', 'Forecast Value', 'Imputed', 'Unofficial']
 
-        fig = go.Figure()
+        fig = go.Figure() #Initialize plot
         fig.add_trace(go.Scatter(x=df['year'], y=df['population'], mode='lines+markers', name='lines', marker=dict(color=df['colours']), line=dict(color='black')))
 
         for color, label in zip(colors, labels):
@@ -256,7 +260,42 @@ def init_callbacks(dash_app):
         
         
         if(country is not None and species is not None):
-            plotTitle = species + " Population by Year in " + country
+            if df.empty:
+                plotTitle = species + " Population by Year in " + country + " is an Empty Dataset"
+                graphDesc = "Warning: " + species + " Population by Year in " + country + " is an Empty Dataset"
+            else:
+                plotTitle = species + " Population by Year in " + country
+
+                #Prepare the flag values to determine which one is most present in the current graph
+                counts = df['flag'].value_counts()
+                if 'F' in counts:
+                    fValue = (counts['F'] / len(df)) * 100
+                else:
+                    fValue = 0
+                if ' ' in counts:
+                    oValue = (counts[' '] / len(df)) * 100
+                else:
+                    oValue = 0
+                if '*' in counts:
+                    uValue = (counts['*'] / len(df)) * 100
+                else:
+                    uValue = 0
+                if 'Im' in counts:
+                    iValue = (counts['Im'] / len(df)) * 100
+                else:
+                    iValue = 0
+
+                graphDesc = "In " + species + " Population by Year in " + country + ":\n"
+                highest = max(fValue,oValue,uValue,iValue)
+                
+                if fValue == highest:
+                    graphDesc = graphDesc + "There is " +  f"{fValue:.2f}%" + " Forecasted values"
+                elif oValue == highest:
+                    graphDesc = graphDesc + "There is " +  f"{oValue:.2f}%" + " Official values"
+                elif uValue == highest:
+                    graphDesc = graphDesc + "There is " +  f"{uValue:.2f}%" + " Unofficial values"
+                else:
+                    graphDesc = graphDesc + "There is " +  f"{iValue:.2f}%" + " Imputed values"
         else:
             plotTitle = " "
         fig.update_layout(title=plotTitle)
@@ -268,7 +307,8 @@ def init_callbacks(dash_app):
         )
         fig.layout.autosize = True
 
-        return dcc.Graph(className='main-graph-size', id="main-graph", figure=fig)
+
+        return dcc.Graph(className='main-graph-size', id="main-graph", figure=fig), graphDesc
 
 
 

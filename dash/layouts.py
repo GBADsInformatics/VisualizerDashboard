@@ -56,6 +56,13 @@ page_1 = html.Div([
                     selected_style=selectedTabStyle,
                     children=[
                         html.Div(
+                            id='graphDesc',
+                            className='tab-section',
+                            children=[
+                                html.P('This section will display the most frequent flag in the graph displayed to assist with data analysis.',style={'margin-bottom':'0'})
+                            ]
+                        ),
+                        html.Div(
                             className='tab-section-flex-container',
                             children=[
                                 html.Div(
