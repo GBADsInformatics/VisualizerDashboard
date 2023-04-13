@@ -233,7 +233,7 @@ def init_callbacks(dash_app):
     def create_graph(country, species):
         
         # Declare descriptor string
-        graphDesc = ""
+        graphDesc = "" + country + " , " + species
 
 
         # Filtering the dataframe to only include specific species/countries
@@ -263,7 +263,6 @@ def init_callbacks(dash_app):
         if(country is not None and species is not None):
 
             #TODO
-            # -Prevent graph from being loaded before anything is selected
             # -Provide list of graphs that go over a certain threshold %
             # -
             
@@ -292,17 +291,17 @@ def init_callbacks(dash_app):
                 else:
                     iValue = 0
 
-                graphDesc = "In " + species + " Population by Year in " + country + ":\n"
+                graphDesc = species + " Population by Year in " + country + ":\n"
                 highest = max(fValue,oValue,uValue,iValue)
                 
                 if fValue == highest:
-                    graphDesc = graphDesc + " " +  f"{fValue:.2f}%" + " consists of Forecasted Values."
+                    graphDesc = graphDesc + " Contains " +  f"{fValue:.2f}%" + " Forecasted Values."
                 elif oValue == highest:
-                    graphDesc = graphDesc + " " +  f"{fValue:.2f}%" + " consists of Official Values."
+                    graphDesc = graphDesc + " Contains " +  f"{oValue:.2f}%" + " Official Values. "
                 elif uValue == highest:
-                    graphDesc = graphDesc + " " +  f"{fValue:.2f}%" + " consists of Unofficial Values."
+                    graphDesc = graphDesc + " Contains " +  f"{uValue:.2f}%" + " Unofficial Values."
                 else:
-                    graphDesc = graphDesc + " " +  f"{fValue:.2f}%" + " consists of Imputed Values."
+                    graphDesc = graphDesc + " Contains " +  f"{iValue:.2f}%" + " Imputed Values. "
         else:
             plotTitle = " "
         fig.update_layout(title=plotTitle)
