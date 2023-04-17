@@ -1,5 +1,5 @@
 
-# GBADS FAOSTAT Visualizer Dashboard
+# GBADS FAOSTAT Data Visualization Dashboard
 
 This dashboard was created ontop of the [GBADS Dashboard Template](https://github.com/GBADsInformatics/Dashboard_Template) by [@Amardeep](https://github.com/amardeep-1) and [@Nitin](https://github.com/Nitin501)
 
