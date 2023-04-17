@@ -37,8 +37,8 @@ SPECIES = sorted(DATAFRAME['species'].unique())
 METASET = 'datasets/metadata/'
 METADATA_SOURCES = {
     'EXAMPLE DATA':{ # Datasources added in this section needs to be updated in layouts.py line 205
-        'METADATA': METASET+'ExampleMetadata.csv', # The displayed meta data table
-        'DOWNLOAD': METASET+'ExampleMetadata.json', # For download as json button
+        'METADATA': METASET+'20220613_FAOSTAT_QCL.csv', # The displayed meta data table
+        'DOWNLOAD': METASET+'20220613_FAOSTAT_QCL.json', # For download as json button
         'PROVENANCE': METASET+'ExampleProvenance.txt', # Provenance for dataset
     },
 }
@@ -66,7 +66,7 @@ def init_dashboard(server):
             
     dash_app = dash.Dash(__name__,
         server=server,
-        title='FAOSTAT Visualizer Prototype',
+        title='FAOSTAT Data Visualization',
         routes_pathname_prefix="/dash/",
         external_stylesheets=[
             # 'https://codepen.io/chriddyp/pen/bWLwgP.css',
@@ -304,7 +304,7 @@ def init_callbacks(dash_app):
                     graphDesc = graphDesc + " Contains " +  f"{iValue:.2f}%" + " Imputed Values. "
         else:
             plotTitle = " "
-        fig.update_layout(title=plotTitle)
+        fig.update_layout(title=plotTitle, template="plotly_white")
         fig.update_layout(
             margin={"r":10,"t":45,"l":10,"b":10},
             font=dict(

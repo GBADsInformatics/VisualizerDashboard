@@ -1,0 +1,59 @@
+{
+  "@context": "http://schema.org",
+  "@type": "Dataset",
+  "@id": "",
+  "identifier": "http://gbadske.org:9000/dataportal/",
+  "name": "FAOSTAT LIVE ANIMALS (QCL)",
+  "about:": "The Global Burden of Animal Disease Informatics Metadata provides information about how data can be accessed via the GBADs API, as well as other relevant information about the data. Information about terms used or to access FAOSTAT metadata for this dataset can be found here: https://www.fao.org/faostat/en/#data/QCL/metadata",
+  "creator": [
+    {
+      "@type": "Organization",
+      "name": "Food and Agriculture Organization of the United Nations (FAO)",
+      "contact": "faostat@fao.org"
+    }
+  ],
+  "contactPoint": [
+    {
+      "@type": "Organization",
+      "name": "The Global Burden of Animal Diseases Informatics",
+      "email": "metadata@gbadske.org"
+    }
+  ],
+  "dcmi:periodocity": "Annual",
+  "datePublished": "2022-06-03",
+  "description": "Livestock population numbers for each country from 1961-2019 from the Food and Agriculture Organization of the United Nations (FAOSTAT) Crop and livestock products (QCL) dataset. Data were accessed by navigating to the [FAOSTAT QCL data portal](https://www.fao.org/faostat/en/#data/QCL), and selecting the 'stocks', and 'live animals' as parameters.",
+  "spatialCoverage": "Data are reported by country. Countries are reported in the M49 format as described in the original FAOSTAT metadata https://www.fao.org/faostat/en/#data/QCL/metadata",
+  "temporalCoverage": "1961/2019",
+  "keywords": [
+    "Live animals",
+    "Production",
+    "Population"
+  ],
+  "species": "Asses, Beehives, Buffaloes, Camelids and other, Camels, Cattle, Chickens, Ducks, Geese and guinea fowls, Goats, Horses, Mules, Pigs, Rabbits and Hares, Rodents and other, Sheep, Turkeys, Cattle and Buffaloes, Poultry Birds, Sheep and Goats",
+  "citation": [
+    {
+      "text": "Food and Agriculture Organization of the United Nations. FAOSTAT Statistical Database. [Rome] :FAO, 1997.",
+      "@id": "http://www.fao.org/faostat/en/#data",
+      "identifier": "http://www.fao.org/faostat/en/#data"
+    }
+  ],
+  "license": {
+    "text": "FAO Open Data for Statistical Databases Policy",
+    "url": "http://www.fao.org/3/ca7570en/ca7570en.pdf"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Food and Agriculture Organization of the United Nations (FAO)"
+  },
+  "provider": {
+    "@type": "Organization",
+    "name": "Food and Agriculture Organization of the United Nations (FAO)"
+  },
+  "distribution": [
+    {
+      "@type": "DataDownload",
+      "fileFormat": "csv",
+      "contentUrl": "Data can be downloaded via the GBADs API. For more information about specific API calls please visit http://gbadske.org:9000/dataportal/"
+    }
+  ]
+}
