@@ -25,13 +25,15 @@ from authlib.integrations.flask_client import OAuth
 app.secret_key = env.get('SECRET_KEY',"randomstringofcharacters")
 app.debug = env.get('DEBUG','false').lower() in ('true', '1', 't')
 
-AUTH0_CALLBACK_URL = env.get('AUTH0_CALLBACK_URL',"/callback")
+DASH_BASE_URL = env.get('DASH_BASE_URL','/dash')
+
+AUTH0_CALLBACK_URL = env.get('AUTH0_CALLBACK_URL', DASH_BASE_URL+"/")
 AUTH0_CLIENT_ID = env.get('AUTH0_CLIENT_ID', None)
 AUTH0_CLIENT_SECRET = env.get('AUTH0_CLIENT_SECRET', None)
 AUTH0_DOMAIN = env.get('AUTH0_DOMAIN',"test-auth0-test1.us.auth0.com")
 AUTH0_BASE_URL = 'https://' + AUTH0_DOMAIN
 AUTH0_AUDIENCE = env.get('AUTH0_AUDIENCE', None)
-AUTH0_REDIRECT = env.get('AUTH0_REDIRECT',"/dash")
+AUTH0_REDIRECT = env.get('AUTH0_REDIRECT', DASH_BASE_URL+"/")
 
 
 # @app.route('/')

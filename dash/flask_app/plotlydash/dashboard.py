@@ -3,6 +3,7 @@ import json
 from logging import disable
 from operator import gt
 from os.path import exists
+from os import environ as env
 import requests
 import numpy as np
 import pandas as pd
@@ -26,6 +27,9 @@ from dash.dependencies import Input, Output, State
 # from dash_extensions.enrich import Output, DashProxy, Input, MultiplexerTransform
 import json
 from textwrap import dedent
+
+# dash base url
+DASH_BASE_URL = env.get('DASH_BASE_URL','/dash')
 
 # Importing dataset
 DATAFRAME = pd.read_csv('datasets/Faostat_Data.csv')
@@ -67,7 +71,7 @@ def init_dashboard(server):
     dash_app = dash.Dash(__name__,
         server=server,
         title='FAOSTAT Data Visualization',
-        routes_pathname_prefix="/dash/",
+        routes_pathname_prefix=DASH_BASE_URL+'/',
         external_stylesheets=[
             # 'https://codepen.io/chriddyp/pen/bWLwgP.css',
             dbc.themes.BOOTSTRAP,
@@ -169,7 +173,7 @@ def init_callbacks(dash_app):
         Input('url', 'pathname')
     )
     def display_page(pathname):
-        if pathname == '/dash/':
+        if pathname == DASH_BASE_URL+'/':
             layout = page_1
         else:
             layout = "404"
