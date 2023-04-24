@@ -3,7 +3,7 @@ html,body{
 }
 
 .year-slider-container{
-    background: #333;
+    background: #ffffff;
     border-radius: 0.3rem;
 }
 .year-slider{
@@ -25,7 +25,7 @@ html,body{
 }
 .tab-section{
     display: block;
-    background: #ececec;
+    background: #ffffff;
     padding: 0.5rem 1rem;
     border-radius: 0.5rem;
     margin-bottom: 1rem;
@@ -81,7 +81,7 @@ html,body{
 .meta-gbads-button{
     border-radius: 0;
     margin-bottom: 0;
-    border-bottom: solid 1px lightgray;
+    border-bottom: solid 1px rgb(255, 255, 255);
 }
 .provenance-button{
     border-radius: 0 0 0.5rem 0.5rem;
@@ -177,7 +177,6 @@ html,body{
     margin-top: 5px;
     align-items: inherit;
     text-align: center;
-    text-shadow: 0 3px 5px dimgrey;
 }
 
 /* Generic CSS from template */
@@ -185,7 +184,7 @@ html,body{
     display: flex;
     flex-direction: column;
     height: 100%;
-    background-color:white;
+    background-color:#f6f6f6d1;
     overflow-y:auto;
     overflow-x:hidden;
     padding: 10px;
@@ -213,7 +212,7 @@ html,body{
 
 .tab-container{
     display: block;
-    width: 37rem;
+    width: 38rem;
 }
 @media only screen and (max-width: 799.9px) {
     .tab-container{
@@ -232,11 +231,25 @@ html,body{
 }
 
 .cattabs {
-    border-radius: 10px 10px 0px 0px;
-    font-weight: bold;
+    border-top: 1px white;
+    border-bottom: 1px white;
+    border-left: 1px white;
     background-color: white;
+    box-shadow: 1px 1px 0px white;
+    color: black;
+}
+
+.cattabs-old {
+    color: #ffffff;
+    background-color: #ffffff;
     height: 100%;
-    color: rgb(78, 78, 78);
+    color: rgb(0, 0, 0);
+    border: 'white';
+    width: 25%;
+    align-items: right;
+    justify-content: right;
+    height: 100%;
+    color: rgb(0, 0, 0);
     width: 25%;
 }
 
@@ -248,8 +261,8 @@ html,body{
 .main-div {
     display: flex;
     flex-direction: column;
-    background-color: #7A7A7A;
-    color: white;
+    background-color: #ffffff;
+    color: rgb(0, 0, 0);
     height: 100%;
     width: 100%;
     position: fixed;

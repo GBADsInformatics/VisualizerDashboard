@@ -211,21 +211,19 @@ def init_callbacks(dash_app):
     )
     def options_on_tab_change(selected_tab,stored_options):
         if stored_options is None:
-            return None, None, None, None
+            return COUNTRIES[0], None, SPECIES[0], None
         return stored_options['options-country'],stored_options['options-country'], stored_options['options-species'], stored_options['options-species'] 
 
 
     # Init dropdowns
     @dash_app.callback(
         Output('options-countries-a', 'options'),
-        Output('options-countries-b', 'options'),
         Output('options-species-a', 'options'),
-        Output('options-species-b', 'options'),
         Input('dummy_div', 'children'),
     )
     def dropdown_options(_a):
         # Return applicable options
-        return COUNTRIES,COUNTRIES,SPECIES,SPECIES
+        return COUNTRIES,SPECIES
 
     # Displaying graph
     @dash_app.callback(
@@ -344,6 +342,9 @@ def init_callbacks(dash_app):
             data=df.to_dict('records'),
             columns=cols,
             export_format="csv",
+            style_cell={
+            'textAlign':'left',
+            'font-family':'sans-serif'}
         )
         return datatable
 
