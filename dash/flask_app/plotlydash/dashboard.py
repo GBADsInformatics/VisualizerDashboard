@@ -311,7 +311,7 @@ def init_callbacks(dash_app):
             if trace['name'] == '':
                 trace['showlegend'] = False
 
-        fig.update_layout(title=plotTitle, template="plotly_white")
+        fig.update_layout(title=dict(text=plotTitle, font=dict(size=25), automargin=True, yref='paper'), template="plotly_white")
         fig.update_layout(
             margin={"r":10,"t":45,"l":10,"b":10},
             font=dict(
