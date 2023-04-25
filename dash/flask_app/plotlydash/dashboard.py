@@ -253,7 +253,7 @@ def init_callbacks(dash_app):
         labels = ['Official', 'Forecast Value', 'Imputed', 'Unofficial']
 
         fig = go.Figure() #Initialize plot
-        fig.add_trace(go.Scatter(x=df['year'], y=df['population'], mode='lines+markers', name='lines', marker=dict(color=df['colours']), line=dict(color='black')))
+        fig.add_trace(go.Scatter(x=df['year'], y=df['population'], mode='lines+markers', name='', marker=dict(color=df['colours']), line=dict(color='black')))
 
         # Adding colours for legend
         for color, label in zip(colors, labels):
@@ -306,6 +306,11 @@ def init_callbacks(dash_app):
                     graphDesc = graphDesc + " Contains " +  f"{iValue:.2f}%" + " Imputed Values. "
         else:
             plotTitle = " "
+
+        for trace in fig['data']:
+            if trace['name'] == '':
+                trace['showlegend'] = False
+
         fig.update_layout(title=plotTitle, template="plotly_white")
         fig.update_layout(
             margin={"r":10,"t":45,"l":10,"b":10},
