@@ -247,9 +247,9 @@ def init_callbacks(dash_app):
         df = df.sort_values("year")  
         fig = None
         
-        df['colours'] = ['blue' if fl == ' ' else 'green' if fl == 'F' else 'orange' if fl == 'Im' else 'red' for fl in df['flag']]
+        df['colours'] = ['#43BCCD' if fl == ' ' else '#662E9B' if fl == 'F' else '#F1D302' if fl == 'Im' else '#EA3546' for fl in df['flag']]
 
-        colors = ['blue', 'green', 'orange', 'red']
+        colors = ['#43BCCD', '#662E9B', '#F1D302', '#EA3546']
         labels = ['Official', 'Forecast Value', 'Imputed', 'Unofficial']
 
         fig = go.Figure() #Initialize plot
