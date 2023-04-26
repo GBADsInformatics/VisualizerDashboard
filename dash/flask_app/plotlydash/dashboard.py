@@ -218,12 +218,14 @@ def init_callbacks(dash_app):
     # Init dropdowns
     @dash_app.callback(
         Output('options-countries-a', 'options'),
+        Output('options-countries-b', 'options'),
         Output('options-species-a', 'options'),
+        Output('options-species-b', 'options'),
         Input('dummy_div', 'children'),
     )
     def dropdown_options(_a):
         # Return applicable options
-        return COUNTRIES,SPECIES
+        return COUNTRIES,COUNTRIES,SPECIES,SPECIES
 
     # Displaying graph
     @dash_app.callback(
