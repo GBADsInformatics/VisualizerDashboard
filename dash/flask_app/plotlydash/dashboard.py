@@ -211,7 +211,7 @@ def init_callbacks(dash_app):
     )
     def options_on_tab_change(selected_tab,stored_options):
         if stored_options is None:
-            return COUNTRIES[0], None, SPECIES[0], None
+            return COUNTRIES[0], COUNTRIES[0], SPECIES[0], SPECIES[0]
         return stored_options['options-country'],stored_options['options-country'], stored_options['options-species'], stored_options['options-species'] 
 
 
@@ -219,11 +219,13 @@ def init_callbacks(dash_app):
     @dash_app.callback(
         Output('options-countries-a', 'options'),
         Output('options-species-a', 'options'),
+        Output('options-countries-b', 'options'),
+        Output('options-species-b', 'options'),
         Input('dummy_div', 'children'),
     )
     def dropdown_options(_a):
         # Return applicable options
-        return COUNTRIES,SPECIES
+        return COUNTRIES,SPECIES,COUNTRIES,SPECIES
 
     # Displaying graph
     @dash_app.callback(
