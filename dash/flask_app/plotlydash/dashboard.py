@@ -70,7 +70,7 @@ def init_dashboard(server):
             
     dash_app = dash.Dash(__name__,
         server=server,
-        title='FAOSTAT Data Visualization',
+        title='FAOSTAT Data Visualizer',
         routes_pathname_prefix=DASH_BASE_URL+'/',
         external_stylesheets=[
             # 'https://codepen.io/chriddyp/pen/bWLwgP.css',
