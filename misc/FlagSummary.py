@@ -82,3 +82,5 @@ if __name__ == "__main__":
         length = len(COUNTRIES)
 
         print("\nRanking of Offical Values: " + str(index + 1) + "/" + str(length))
+        
+        
