@@ -61,14 +61,14 @@ if __name__ == "__main__":
     print("Imputed Flags: " + "{:.2f}".format(imputed / total * 100) + "%") 
     print("Forecasted Flags: " + "{:.2f}".format(forecast / total * 100) + "%")
 
-    official = 0
-    total = 0
-
     #Calculate % of official flags in each country
     if coun == 1:
         for i in COUNTRIES:
             df = filterdf(i,'country',DATAFRAME)
-
+            
+            official = 0
+            total = 0
+            
             for j in df['flag']:
                 if j == ' ':
                     official += 1
@@ -82,7 +82,3 @@ if __name__ == "__main__":
         length = len(COUNTRIES)
 
         print("\nRanking of Offical Values: " + str(index + 1) + "/" + str(length))
-
-            
-            
-            
