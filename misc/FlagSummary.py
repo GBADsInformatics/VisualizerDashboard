@@ -56,10 +56,10 @@ if __name__ == "__main__":
 
     
     print("Summary of " + sys.argv[1] + " Flags")
-    print("Offical Flags: " + "{:.2f}".format(official / total * 100))
-    print("Unoffical Flags: " + "{:.2f}".format(unoff / total * 100))
-    print("Imputed Flags: " + "{:.2f}".format(imputed / total * 100))
-    print("Forecasted Flags: " + "{:.2f}".format(forecast / total * 100))
+    print("Offical Flags: " + "{:.2f}".format(official / total * 100) + "%")
+    print("Unoffical Flags: " + "{:.2f}".format(unoff / total * 100) + "%")
+    print("Imputed Flags: " + "{:.2f}".format(imputed / total * 100) + "%") 
+    print("Forecasted Flags: " + "{:.2f}".format(forecast / total * 100) + "%")
 
     official = 0
     total = 0
