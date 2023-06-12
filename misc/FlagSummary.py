@@ -1,7 +1,5 @@
 import pandas as pd
 import sys
-import os
-import bisect
 
 #Allow dataframes to be sorted by specific columns
 def filterdf(code, column, df):
