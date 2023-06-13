@@ -43,37 +43,46 @@ if __name__ == "__main__":
     forecast = 0
     
     #total counts of each flags representation
-    for i in df['flag']:
-        if i == ' ':
+    for index, row in df.iterrows():
+        if row['flag'] == ' ':
             official += 1
-        elif i == 'F':
+        elif row['flag'] == 'F':
             forecast += 1
-        elif i == 'Im':
+        elif row['flag'] == 'Im':
             imputed += 1
         else:
             unoff += 1
         total += 1
 
-    
     print("Summary of " + sys.argv[1] + " Flags")
     print("Offical Flags: " + "{:.2f}".format(official / total * 100) + "%")
     print("Unoffical Flags: " + "{:.2f}".format(unoff / total * 100) + "%")
     print("Imputed Flags: " + "{:.2f}".format(imputed / total * 100) + "%") 
     print("Forecasted Flags: " + "{:.2f}".format(forecast / total * 100) + "%")
 
+
+    
     #Calculate % of official flags in each country
     if coun == 1:
+
+        filterHigh = 0
+        
+        if(len(sys.argv) > 2):
+            if sys.argv[2] == "true":
+                filterHigh = 1
         for i in COUNTRIES:
             df = filterdf(i,'country',DATAFRAME)
             
             official = 0
             total = 0
-            
-            for j in df['flag']:
-                if j == ' ':
-                    official += 1
-                total += 1
 
+            for index, row in df.iterrows():
+                if (row['population'] > 100000 and filterHigh == 1) or filterHigh == 0:
+                    if row['flag'] == ' ':
+                        official += 1
+                total += 1
+            
+            
             sortedPerc.insert(0,((official / total * 100), i))
         
         sortedPerc.sort(reverse=True)
@@ -81,6 +90,9 @@ if __name__ == "__main__":
         index = [x[1] for x in sortedPerc].index(sys.argv[1])
         length = len(COUNTRIES)
 
-        print("\nRanking of Offical Values: " + str(index + 1) + "/" + str(length))
+        if filterHigh == 0:
+            print("\nRanking of Offical Values: " + str(index + 1) + "/" + str(length))
+        else:
+            print("\nRanking of Offical Values (Population Values above 100k): " + str(index + 1) + "/" + str(length))
         
         
