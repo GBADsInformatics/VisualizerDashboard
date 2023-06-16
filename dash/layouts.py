@@ -187,6 +187,50 @@ page_1 = html.Div([
                     ],  
                 ),
                 dcc.Tab(
+                    label='Flag Summary', 
+                    style=tab_style,
+                    selected_style=selectedTabStyle,
+                    children=[
+                        html.Div(
+                            className='tab-section-flex-container',
+                            children=[
+                                html.Div(
+                                    className='tab-section data-options',
+                                    children=[
+                                        html.Div(
+                                            children=[
+                                                html.H4("Options",style={"text-align":"center"}),
+                                                html.Hr(),
+                                                html.H5("Country",style={"margin":"0.4rem 0 0.2rem 0"}),
+                                                dcc.Dropdown(
+                                                    id='options-countries-c',
+                                                    clearable=False,
+                                                    multi=False,
+                                                ),html.Div(
+                                                    id='species-container-c',
+                                                    children=[
+                                                        html.H5("Species",style={"margin":"0.4rem 0 0.2rem 0"}),
+                                                        dcc.Dropdown(
+                                                            id='options-species-c',
+                                                            clearable=False,
+                                                            multi=False,
+                                                        )
+                                                    ],
+                                                ),
+                                            ]
+                                        ),
+
+                                    ]
+                                ),
+                                html.Div(
+                                    
+                                ),
+
+                            ]
+                        ),
+                    ],  
+                ),
+                dcc.Tab(
                     label='Metadata', 
                     style=tab_style,
                     selected_style=selectedTabStyle,

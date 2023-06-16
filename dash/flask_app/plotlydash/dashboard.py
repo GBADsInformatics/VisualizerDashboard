@@ -190,12 +190,16 @@ def init_callbacks(dash_app):
         [State('tabs', 'value')],
         Input('options-countries-a', 'value'),
         Input('options-countries-b', 'value'),
+        Input('options-countries-c', 'value'),
         Input('options-species-a', 'value'),
         Input('options-species-b', 'value'),
+        Input('options-species-c', 'value'),
     )
-    def update_stored_options_a(tab, drop1a, drop1b, drop2a, drop2b):
+    def update_stored_options_a(tab, drop1a, drop1b, drop1c, drop2a, drop2b, drop2c):
         if tab == 'tab-2':
             return {'options-country':drop1b,'options-species':drop2b}
+        elif tab == 'tab-3':
+            return {'options-country':drop1c,'options-species':drop2c}
         else:
             return {'options-country':drop1a,'options-species':drop2a}
 
@@ -204,15 +208,17 @@ def init_callbacks(dash_app):
     @dash_app.callback(
         Output('options-countries-a', 'value'),
         Output('options-countries-b', 'value'),
+        Output('options-countries-c', 'value'),
         Output('options-species-a', 'value'),
         Output('options-species-b', 'value'),
+        Output('options-species-c', 'value'),
         [Input('tabs', 'value')],
         State('stored-options', 'data'),
     )
     def options_on_tab_change(selected_tab,stored_options):
         if stored_options is None:
-            return COUNTRIES[0], COUNTRIES[0], SPECIES[0], SPECIES[0]
-        return stored_options['options-country'],stored_options['options-country'], stored_options['options-species'], stored_options['options-species'] 
+            return COUNTRIES[0], COUNTRIES[0], COUNTRIES[0], SPECIES[0], SPECIES[0], SPECIES[0]
+        return stored_options['options-country'],stored_options['options-country'],stored_options['options-country'], stored_options['options-species'], stored_options['options-species'], stored_options['options-species'] 
 
 
     # Init dropdowns
@@ -221,11 +227,13 @@ def init_callbacks(dash_app):
         Output('options-species-a', 'options'),
         Output('options-countries-b', 'options'),
         Output('options-species-b', 'options'),
+        Output('options-countries-c', 'options'),
+        Output('options-species-c', 'options'),
         Input('dummy_div', 'children'),
     )
     def dropdown_options(_a):
         # Return applicable options
-        return COUNTRIES,SPECIES,COUNTRIES,SPECIES
+        return COUNTRIES,SPECIES,COUNTRIES,SPECIES,COUNTRIES,SPECIES
 
     # Displaying graph
     @dash_app.callback(
