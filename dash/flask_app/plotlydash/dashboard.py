@@ -335,6 +335,58 @@ def init_callbacks(dash_app):
 
         return dcc.Graph(className='main-graph-size', id="main-graph", figure=fig), graphDesc
 
+     # Displaying Flag Summary
+    @dash_app.callback(
+        Output('summary-container', 'children'),
+        Input('options-countries-c', 'value'),
+        Input('options-species-c', 'value')
+    )
+    def create_summary(country, species):
+        
+        # Declare descriptor string
+        graphDesc = "" + country + " , " + species
+
+
+        # Filtering the dataframe to only include specific species/countries
+        
+        df = filterdf(country,'country',DATAFRAME)
+
+        fig = None
+
+        #Alter dataframe for readability
+        df['flag'] = df['flag'].replace(' ', 'Official')
+        df['flag'] = df['flag'].replace('F', 'Forecasted')
+        df['flag'] = df['flag'].replace('Im', 'Imputed')
+        df['flag'] = df['flag'].replace('*', 'Unofficial')
+
+        #Creating percentages for bar graph
+        percentages = df['flag'].value_counts(normalize=True) * 100
+        pDf = pd.DataFrame({'Flag': percentages.index, 'Percentage': percentages.values})
+        fig = px.bar(pDf, x='Flag', y='Percentage')
+
+        #Alter graph output if user has made selections through the dash
+        if(country is not None):
+            
+            if df.empty:
+                plotTitle = " "
+            else:
+                plotTitle = "Flag Summaries of " + country
+
+                
+        else:
+            plotTitle = " "
+
+        fig.update_layout(title=dict(text=plotTitle, font=dict(size=25), automargin=True, yref='paper'), template="plotly_white")
+        fig.update_layout(
+            margin={"r":10,"t":45,"l":10,"b":10},
+            font=dict(
+                size=16,
+            )
+        )
+        fig.layout.autosize = True
+
+        return dcc.Graph(className='main-graph-size', id="main-graph", figure=fig)
+    
 
 
     # Updating Datatable

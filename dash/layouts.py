@@ -222,8 +222,17 @@ page_1 = html.Div([
 
                                     ]
                                 ),
-                                html.Div(
-                                    
+                                 html.Div(
+                                    id='summary-section',
+                                    className='tab-section data-section',
+                                    children=[
+                                        dcc.Loading(
+                                            id='summary-container',
+                                            type='cube',
+                                            parent_className='summary-container',
+                                            children=[html.P('Please select appropriate dropdown options.')]
+                                        ),
+                                    ]
                                 ),
 
                             ]
