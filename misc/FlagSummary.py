@@ -94,5 +94,6 @@ if __name__ == "__main__":
             print("\nRanking of Offical Values: " + str(index + 1) + "/" + str(length))
         else:
             print("\nRanking of Offical Values (Population Values above 100k): " + str(index + 1) + "/" + str(length))
+            print(sortedPerc)
         
         

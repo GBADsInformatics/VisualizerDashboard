@@ -359,10 +359,16 @@ def init_callbacks(dash_app):
         df['flag'] = df['flag'].replace('Im', 'Imputed')
         df['flag'] = df['flag'].replace('*', 'Unofficial')
 
+
+        colourList = {'Official': '#43BCCD', 'Forecasted': '#662E9B', 'Imputed': '#F1D302', 'Unofficial': '#EA3546'}
+
         #Creating percentages for bar graph
         percentages = df['flag'].value_counts(normalize=True) * 100
         pDf = pd.DataFrame({'Flag': percentages.index, 'Percentage': percentages.values})
-        fig = px.bar(pDf, x='Flag', y='Percentage')
+        colours = [colourList[title] for title in pDf['Flag']]
+
+        fig = go.Figure()
+        fig.add_trace(go.Bar(x=pDf['Flag'], y=pDf['Percentage'], marker_color=colours))
 
         #Alter graph output if user has made selections through the dash
         if(country is not None):
