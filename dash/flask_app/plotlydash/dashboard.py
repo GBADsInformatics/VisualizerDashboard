@@ -350,6 +350,7 @@ def init_callbacks(dash_app):
         # Filtering the dataframe to only include specific species/countries
         
         df = filterdf(country,'country',DATAFRAME)
+        pDf = None
 
         fig = None
 
@@ -358,17 +359,18 @@ def init_callbacks(dash_app):
         df['flag'] = df['flag'].replace('F', 'Forecasted')
         df['flag'] = df['flag'].replace('Im', 'Imputed')
         df['flag'] = df['flag'].replace('*', 'Unofficial')
+        df['flag'] = df['flag'].replace('M', 'Missing')
 
 
-        colourList = {'Official': '#43BCCD', 'Forecasted': '#662E9B', 'Imputed': '#F1D302', 'Unofficial': '#EA3546'}
-
+        colourList = ['#43BCCD', '#662E9B', '#EA3546', '#F1D302']
+        
         #Creating percentages for bar graph
-        percentages = df['flag'].value_counts(normalize=True) * 100
-        pDf = pd.DataFrame({'Flag': percentages.index, 'Percentage': percentages.values})
-        colours = [colourList[title] for title in pDf['Flag']]
-
-        fig = go.Figure()
-        fig.add_trace(go.Bar(x=pDf['Flag'], y=pDf['Percentage'], marker_color=colours))
+        if not df.empty:
+            percentages = df['flag'].value_counts(normalize=True) * 100
+            pDf = pd.DataFrame({'Flag': percentages.index, 'Percentage': percentages.values})
+            
+            fig = go.Figure()
+            fig.add_trace(go.Bar(x=percentages.index, y=percentages.values, marker_color=colourList))
 
         #Alter graph output if user has made selections through the dash
         if(country is not None):
