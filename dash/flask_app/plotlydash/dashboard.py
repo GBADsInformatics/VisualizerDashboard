@@ -343,14 +343,10 @@ def init_callbacks(dash_app):
     )
     def create_summary(country, species):
         
-        # Declare descriptor string
-        graphDesc = "" + country + " , " + species
-
-
         # Filtering the dataframe to only include specific species/countries
         
         df = filterdf(country,'country',DATAFRAME)
-        pDf = None
+        #df = filterdf(species,'species',DATAFRAME)
 
         fig = None
 
@@ -362,15 +358,51 @@ def init_callbacks(dash_app):
         df['flag'] = df['flag'].replace('M', 'Missing')
 
 
+        df_group = df.groupby(['year', 'flag']).size().reset_index(name='count')
+        new_df = pd.DataFrame(df_group)
+
+
+        # Official, Forecast, Imputed, Unofficial
         colourList = ['#43BCCD', '#662E9B', '#EA3546', '#F1D302']
         
         #Creating percentages for bar graph
         if not df.empty:
             percentages = df['flag'].value_counts(normalize=True) * 100
-            pDf = pd.DataFrame({'Flag': percentages.index, 'Percentage': percentages.values})
+            
             
             fig = go.Figure()
-            fig.add_trace(go.Bar(x=percentages.index, y=percentages.values, marker_color=colourList))
+            legend_flags = []
+            for i, year in enumerate(df_group['year'].unique()):
+                df_year = df_group[df_group['year'] == year]
+                for j, row in enumerate(df_year.iterrows()):
+                    if row[1]['flag'] == 'Official':
+                        color = "#43BCCD"
+                    elif row[1]['flag'] == 'Forecasted':
+                        color = '#662E9B'
+                    elif row[1]['flag'] == 'Imputed':
+                        color = '#F1D302'
+                    elif row[1]['flag'] == 'Missing':
+                        color = '#000000'
+                    else:
+                        color = '#EA3546'
+
+                    showlegend = False
+                    if row[1]['flag'] not in legend_flags:
+                        showlegend = True
+                        legend_flags.append(row[1]['flag'])
+                    fig.add_trace(
+                        go.Bar(
+                            x=[row[1]['year']],
+                            y=[row[1]['count']],
+                            name=row[1]['flag'],
+                            marker_color=color,
+                            legendgroup=row[1]['flag'],
+                            showlegend=showlegend
+                        )
+                    )
+
+            fig.update_layout(barmode='stack')
+            #fig.add_trace(go.Bar(x=percentages.index, y=percentages.values, marker_color=colourList, offsetgroup=0,))
 
         #Alter graph output if user has made selections through the dash
         if(country is not None):
