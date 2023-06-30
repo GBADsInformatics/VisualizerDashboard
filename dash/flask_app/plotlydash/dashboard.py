@@ -259,10 +259,10 @@ def init_callbacks(dash_app):
         df = df.sort_values("year")  
         fig = None
         
-        df['colours'] = ['#43BCCD' if fl == ' ' else '#662E9B' if fl == 'F' else '#F1D302' if fl == 'Im' else '#EA3546' for fl in df['flag']]
+        df['colours'] = ['#43BCCD' if fl == ' ' else '#662E9B' if fl == 'F' else '#F1D302' if fl == 'Im' else '#FFFFFF' if fl == 'M' else '#EA3546' for fl in df['flag']]
 
-        colors = ['#43BCCD', '#662E9B', '#F1D302', '#EA3546']
-        labels = ['Official', 'Forecast Value', 'Imputed', 'Unofficial']
+        colors = ['#43BCCD', '#662E9B', '#F1D302', '#EA3546', '#FFFFFF']
+        labels = ['Official', 'Forecast Value', 'Imputed', 'Unofficial', 'Missing']
 
         fig = go.Figure() #Initialize plot
         fig.add_trace(go.Scatter(x=df['year'], y=df['population'], mode='lines+markers', name='', marker=dict(size=10, color=df['colours'], line=dict(width=2,
