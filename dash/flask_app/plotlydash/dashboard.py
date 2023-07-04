@@ -212,13 +212,14 @@ def init_callbacks(dash_app):
         Output('options-species-a', 'value'),
         Output('options-species-b', 'value'),
         Output('options-species-c', 'value'),
+        Output('options-choice-c', 'value'),
         [Input('tabs', 'value')],
         State('stored-options', 'data'),
     )
     def options_on_tab_change(selected_tab,stored_options):
         if stored_options is None:
-            return COUNTRIES[0], COUNTRIES[0], COUNTRIES[0], SPECIES[0], SPECIES[0], SPECIES[0]
-        return stored_options['options-country'],stored_options['options-country'],stored_options['options-country'], stored_options['options-species'], stored_options['options-species'], stored_options['options-species'] 
+            return COUNTRIES[0], COUNTRIES[0], COUNTRIES[0], SPECIES[0], SPECIES[0], SPECIES[0], "Country"
+        return stored_options['options-country'],stored_options['options-country'],stored_options['options-country'], stored_options['options-species'], stored_options['options-species'], stored_options['options-species'], "Country"
 
 
     # Init dropdowns

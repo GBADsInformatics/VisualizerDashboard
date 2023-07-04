@@ -201,6 +201,17 @@ page_1 = html.Div([
                                             children=[
                                                 html.H4("Options",style={"text-align":"center"}),
                                                 html.Hr(),
+                                                html.Div(
+                                                    id='choice-container-c',
+                                                    children=[
+                                                        html.H5("Country or Species",style={"margin":"0.4rem 0 0.2rem 0"}),
+                                                        dcc.Dropdown(
+                                                            id='options-choice-c',
+                                                            clearable=False,
+                                                            multi=False,
+                                                        )
+                                                    ],
+                                                ),
                                                 html.H5("Country",style={"margin":"0.4rem 0 0.2rem 0"}),
                                                 dcc.Dropdown(
                                                     id='options-countries-c',
@@ -216,17 +227,7 @@ page_1 = html.Div([
                                                             multi=False,
                                                         )
                                                     ],
-                                                ),html.Div(
-                                                    id='choice-container-c',
-                                                    children=[
-                                                        html.H5("Country or Species",style={"margin":"0.4rem 0 0.2rem 0"}),
-                                                        dcc.Dropdown(
-                                                            id='options-choice-c',
-                                                            clearable=False,
-                                                            multi=False,
-                                                        )
-                                                    ],
-                                                ),
+                                                )
                                             ]
                                         ),
 
