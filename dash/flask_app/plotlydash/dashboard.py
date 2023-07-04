@@ -229,11 +229,12 @@ def init_callbacks(dash_app):
         Output('options-species-b', 'options'),
         Output('options-countries-c', 'options'),
         Output('options-species-c', 'options'),
+        Output('options-choice-c', 'options'),
         Input('dummy_div', 'children'),
     )
     def dropdown_options(_a):
         # Return applicable options
-        return COUNTRIES,SPECIES,COUNTRIES,SPECIES,COUNTRIES,SPECIES
+        return COUNTRIES,SPECIES,COUNTRIES,SPECIES,COUNTRIES,SPECIES,['Country', 'Species']
 
     # Displaying graph
     @dash_app.callback(
@@ -339,13 +340,17 @@ def init_callbacks(dash_app):
     @dash_app.callback(
         Output('summary-container', 'children'),
         Input('options-countries-c', 'value'),
-        Input('options-species-c', 'value')
+        Input('options-species-c', 'value'),
+        Input('options-choice-c', 'value')
     )
-    def create_summary(country, species):
+    def create_summary(country, species, choice):
         
         # Filtering the dataframe to only include specific species/countries
         
-        df = filterdf(country,'country',DATAFRAME)
+        if(choice == 'Country'):
+            df = filterdf(country,'country',DATAFRAME)
+        else:
+            df = filterdf(species,'species',DATAFRAME)
         #df = filterdf(species,'species',DATAFRAME)
 
         fig = None
@@ -359,16 +364,9 @@ def init_callbacks(dash_app):
 
 
         df_group = df.groupby(['year', 'flag']).size().reset_index(name='count')
-        new_df = pd.DataFrame(df_group)
-
-
-        # Official, Forecast, Imputed, Unofficial
-        colourList = ['#43BCCD', '#662E9B', '#EA3546', '#F1D302']
         
         #Creating percentages for bar graph
         if not df.empty:
-            percentages = df['flag'].value_counts(normalize=True) * 100
-            
             
             fig = go.Figure()
             legend_flags = []
@@ -410,8 +408,10 @@ def init_callbacks(dash_app):
             if df.empty:
                 plotTitle = " "
             else:
-                plotTitle = "Flag Summaries of " + country
-
+                if(choice == 'Country'):
+                    plotTitle = "Flag Summaries of " + country
+                else:
+                    plotTitle = "Flag Summaries of " + species + " Across all Countries"
                 
         else:
             plotTitle = " "
