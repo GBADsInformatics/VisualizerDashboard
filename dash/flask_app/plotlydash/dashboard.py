@@ -340,6 +340,9 @@ def init_callbacks(dash_app):
      # Displaying Flag Summary
     @dash_app.callback(
         Output('summary-container', 'children'),
+        Output('species-container-c', 'style'),
+        Output('options-countries-c', 'style'),
+        Output('country-title-c', 'style'),
         Input('options-countries-c', 'value'),
         Input('options-species-c', 'value'),
         Input('options-choice-c', 'value')
@@ -347,22 +350,25 @@ def init_callbacks(dash_app):
     def create_summary(country, species, choice):
         
         # Filtering the dataframe to only include specific species/countries
-        
+        styleC = {'display': 'block'}
+        styleS = {'display': 'block'}
+        styleTitle={"margin":"0.4rem 0 0.2rem 0", 'display': 'block'}
         if(choice == 'Country'):
             df = filterdf(country,'country',DATAFRAME)
+            styleS = {'display': 'none'}
+            styleC = {'display': 'block'}
+            styleTitle={"margin":"0.4rem 0 0.2rem 0", 'display': 'block'}
         else:
             df = filterdf(species,'species',DATAFRAME)
+            styleS = {'display': 'block'}
+            styleC = {'display': 'none'}
+            styleTitle={"margin":"0.4rem 0 0.2rem 0", 'display': 'none'}
         #df = filterdf(species,'species',DATAFRAME)
 
         fig = None
 
         #Alter dataframe for readability
-        df['flag'] = df['flag'].replace(' ', 'Official')
-        df['flag'] = df['flag'].replace('F', 'Forecasted')
-        df['flag'] = df['flag'].replace('Im', 'Imputed')
-        df['flag'] = df['flag'].replace('*', 'Unofficial')
-        df['flag'] = df['flag'].replace('M', 'Missing')
-
+        df.loc[:, 'flag'] = df['flag'].replace([' ', 'F', 'Im', '*', 'M'], ['Official', 'Forecasted', 'Imputed', 'Unofficial', 'Missing'])
 
         df_group = df.groupby(['year', 'flag']).size().reset_index(name='count')
         
@@ -426,7 +432,7 @@ def init_callbacks(dash_app):
         )
         fig.layout.autosize = True
 
-        return dcc.Graph(className='main-graph-size', id="main-graph", figure=fig)
+        return dcc.Graph(className='main-graph-size', id="main-graph", figure=fig), styleS, styleC, styleTitle
     
 
 

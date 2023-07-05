@@ -212,11 +212,12 @@ page_1 = html.Div([
                                                         )
                                                     ],
                                                 ),
-                                                html.H5("Country",style={"margin":"0.4rem 0 0.2rem 0"}),
+                                                html.H5("Country", id='country-title-c',style={"margin":"0.4rem 0 0.2rem 0", 'display': 'block'}),
                                                 dcc.Dropdown(
                                                     id='options-countries-c',
                                                     clearable=False,
                                                     multi=False,
+                                                    style={'display': 'block'},
                                                 ),html.Div(
                                                     id='species-container-c',
                                                     children=[
@@ -227,6 +228,7 @@ page_1 = html.Div([
                                                             multi=False,
                                                         )
                                                     ],
+                                                    style={'display': 'block'},
                                                 )
                                             ]
                                         ),
