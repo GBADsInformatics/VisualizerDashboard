@@ -349,7 +349,7 @@ def init_callbacks(dash_app):
     )
     def create_summary(country, species, choice):
         
-        # Filtering the dataframe to only include specific species/countries
+        # Filter the dataframe according to user's option selections
         styleC = {'display': 'block'}
         styleS = {'display': 'block'}
         styleTitle={"margin":"0.4rem 0 0.2rem 0", 'display': 'block'}
@@ -363,7 +363,6 @@ def init_callbacks(dash_app):
             styleS = {'display': 'block'}
             styleC = {'display': 'none'}
             styleTitle={"margin":"0.4rem 0 0.2rem 0", 'display': 'none'}
-        #df = filterdf(species,'species',DATAFRAME)
 
         fig = None
 
@@ -371,34 +370,36 @@ def init_callbacks(dash_app):
         df.loc[:, 'flag'] = df['flag'].replace([' ', 'F', 'Im', '*', 'M'], ['Official', 'Forecasted', 'Imputed', 'Unofficial', 'Missing'])
 
         df_group = df.groupby(['year', 'flag']).size().reset_index(name='count')
+        df_group['percent'] = df_group.groupby('year')['count'].apply(lambda x: x / x.sum() * 100).round(2)
         
-        #Creating percentages for bar graph
+        #Adding percentages to graph
         if not df.empty:
-            
             fig = go.Figure()
             legend_flags = []
-            for i, year in enumerate(df_group['year'].unique()):
+            
+            for i, year in enumerate(df_group['year'].unique()): #For each year
                 df_year = df_group[df_group['year'] == year]
-                for j, row in enumerate(df_year.iterrows()):
-                    if row[1]['flag'] == 'Official':
+                #df_year = df_year.sort_values(['flag'], ascending=False)
+                for j, row in enumerate(df_year.iterrows()): #For each row in the year
+                    if row[1]['flag'] == 'Unofficial':
+                        color = '#EA3546'
+                    elif row[1]['flag'] == 'Official':
                         color = "#43BCCD"
                     elif row[1]['flag'] == 'Forecasted':
                         color = '#662E9B'
                     elif row[1]['flag'] == 'Imputed':
                         color = '#F1D302'
-                    elif row[1]['flag'] == 'Missing':
-                        color = '#000000'
                     else:
-                        color = '#EA3546'
-
+                        color = '#000000'
+                        
                     showlegend = False
-                    if row[1]['flag'] not in legend_flags:
+                    if row[1]['flag'] not in legend_flags: #Only add to legend if first occurence of flag
                         showlegend = True
                         legend_flags.append(row[1]['flag'])
                     fig.add_trace(
                         go.Bar(
                             x=[row[1]['year']],
-                            y=[row[1]['count']],
+                            y=[row[1]['percent']],
                             name=row[1]['flag'],
                             marker_color=color,
                             legendgroup=row[1]['flag'],
@@ -406,19 +407,17 @@ def init_callbacks(dash_app):
                         )
                     )
 
-            fig.update_layout(barmode='stack')
-            #fig.add_trace(go.Bar(x=percentages.index, y=percentages.values, marker_color=colourList, offsetgroup=0,))
+            fig.update_layout(barmode='stack', yaxis={'title': 'Percentage'}, xaxis={'title': 'Year'})
 
-        #Alter graph output if user has made selections through the dash
+        #Set title for graph
         if(country is not None):
-            
             if df.empty:
                 plotTitle = " "
             else:
                 if(choice == 'Country'):
-                    plotTitle = "Flag Summaries of " + country
+                    plotTitle = "Yearly Percentage of Flags in " + country
                 else:
-                    plotTitle = "Flag Summaries of " + species + " Across all Countries"
+                    plotTitle = "Yearly Percentage of Flags for " + species + " Across all Countries"
                 
         else:
             plotTitle = " "
