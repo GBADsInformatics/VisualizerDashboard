@@ -379,16 +379,16 @@ def init_callbacks(dash_app):
             
             for i, year in enumerate(df_group['year'].unique()): #For each year
                 df_year = df_group[df_group['year'] == year]
-                #df_year = df_year.sort_values(['flag'], ascending=False)
-                for j, row in enumerate(df_year.iterrows()): #For each row in the year
-                    if row[1]['flag'] == 'Unofficial':
-                        color = '#EA3546'
-                    elif row[1]['flag'] == 'Official':
+                df_yearS = df_year.sort_values(['flag'], ascending=False)
+                for j, row in enumerate(df_yearS.iterrows()): #For each row in the year
+                    if row[1]['flag'] == 'Official':
                         color = "#43BCCD"
                     elif row[1]['flag'] == 'Forecasted':
                         color = '#662E9B'
                     elif row[1]['flag'] == 'Imputed':
                         color = '#F1D302'
+                    elif row[1]['flag'] == 'Unofficial':
+                        color = '#EA3546'
                     else:
                         color = '#000000'
                         
