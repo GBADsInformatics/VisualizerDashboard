@@ -28,6 +28,9 @@ from dash.dependencies import Input, Output, State
 import json
 from textwrap import dedent
 
+# default='warn'
+pd.options.mode.chained_assignment = None  
+
 # dash base url
 DASH_BASE_URL = env.get('DASH_BASE_URL','/dash')
 
@@ -262,16 +265,18 @@ def init_callbacks(dash_app):
         df['colours'] = ['#43BCCD' if fl == ' ' else '#662E9B' if fl == 'F' else '#F1D302' if fl == 'Im' else '#FFFFFF' if fl == 'M' else '#EA3546' for fl in df['flag']]
 
         colors = ['#43BCCD', '#662E9B', '#F1D302', '#EA3546', '#FFFFFF']
-        labels = ['Official', 'Forecast Value', 'Imputed', 'Unofficial', 'Missing']
+        labels = ['Official', 'Forecasted', 'Imputed', 'Unofficial', 'Missing']
 
         fig = go.Figure() #Initialize plot
         fig.add_trace(go.Scatter(x=df['year'], y=df['population'], mode='lines+markers', name='', marker=dict(size=10, color=df['colours'], line=dict(width=2,
                                         color='DarkSlateGrey')), line=dict(color='black')))
-
+        
+        df.loc[:, 'flag'] = df['flag'].replace([' ', 'F', 'Im', '*', 'M'], ['Official', 'Forecasted', 'Imputed', 'Unofficial', 'Missing'])
         # Adding colours for legend
         for color, label in zip(colors, labels):
-            fig.add_trace(go.Scatter(x=[None], y=[None], mode='markers', marker=dict(size=12, color=color, line=dict(width=2,
-                                        color='DarkSlateGrey')), showlegend=True, legendgroup=color, name=label))
+            if label in df['flag'].unique():
+                fig.add_trace(go.Scatter(x=[None], y=[None], mode='markers', marker=dict(size=12, color=color, line=dict(width=2,
+                                            color='DarkSlateGrey')), showlegend=True, legendgroup=color, name=label))
 
         
         
@@ -288,6 +293,7 @@ def init_callbacks(dash_app):
             else:
                 plotTitle = species + " Population by Year in " + country
 
+                df.loc[:, 'flag'] = df['flag'].replace(['Official', 'Forecasted', 'Imputed', 'Unofficial', 'Missing'],[' ', 'F', 'Im', '*', 'M'])
                 #Prepare the flag values to determine which one is most present in the current graph
                 counts = df['flag'].value_counts()
                 if 'F' in counts:
