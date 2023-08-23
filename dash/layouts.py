@@ -133,7 +133,7 @@ page_1 = html.Div([
                     ],  
                 ),
                 dcc.Tab(
-                    label='Data Table', 
+                    label='Raw Table', 
                     style=tab_style,
                     selected_style=selectedTabStyle,
                     children=[
@@ -244,6 +244,60 @@ page_1 = html.Div([
                                             type='cube',
                                             parent_className='summary-container',
                                             children=[html.P('Please select appropriate dropdown options.')]
+                                        ),
+                                    ]
+                                ),
+
+                            ]
+                        ),
+                    ],  
+                ),
+                dcc.Tab(
+                    label='Accuracy Table', 
+                    style=tab_style,
+                    selected_style=selectedTabStyle,
+                    children=[
+                        html.Div(
+                            className='tab-section-flex-container',
+                            children=[
+                                html.Div(
+                                    className='tab-section data-options',
+                                    children=[
+                                        html.Div(
+                                            children=[
+                                                html.H4("Options",style={"text-align":"center"}),
+                                                html.Hr(),
+                                                html.H5("Country",style={"margin":"0.4rem 0 0.2rem 0"}),
+                                                dcc.Dropdown(
+                                                    id='options-countries-d',
+                                                    clearable=False,
+                                                    multi=False,
+                                                ),html.Div(
+                                                    id='species-container-d',
+                                                    children=[
+                                                        html.H5("Species",style={"margin":"0.4rem 0 0.2rem 0"}),
+                                                        dcc.Dropdown(
+                                                            id='options-species-d',
+                                                            clearable=False,
+                                                            multi=False,
+                                                        )
+                                                    ],
+                                                ),
+                                            ]
+                                        ),
+
+                                    ]
+                                ),
+                                html.Div(
+                                    id='acc-table-section',
+                                    className='tab-section data-section',
+                                    children=[
+                                        html.Div(
+                                            id='acc-table-container',
+                                            className='acc-table-container',
+                                            children=[
+                                                
+                                            ]
                                         ),
                                     ]
                                 ),
