@@ -496,18 +496,6 @@ def init_callbacks(dash_app):
 
         #ensure years are in proper order
         df = df.sort_values("year")  
-
-        #data = pd.read_csv('datasets/Difference_'+ species +'.csv')
-        #percent = 1 + (float(sys.argv[2]) * 0.01)
-        #myFile = open(species+"_output_"+ sys.argv[2]+".txt", "w")
-        #myFile.close()
-
-        #for i in data['difference']:
-        #    if i > float(percent):
-        #        #if the difference is higher than given percentage
-        #        #put into a txt file that lists all occurences of said conditional
-        #        output.append("{} {} {}".format(data['country'][j], data['year'][j], data['population'][j]))
-        #    j+=1
         
         # Rendering the data table
         cols = [{"name": i, "id": i,"hideable":True} for i in df.columns]
