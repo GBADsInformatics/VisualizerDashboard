@@ -250,6 +250,7 @@ def init_callbacks(dash_app):
         return COUNTRIES,SPECIES,COUNTRIES,SPECIES,COUNTRIES,SPECIES,['Country', 'Species'],COUNTRIES,SPECIES
 
     # Displaying graph
+    # TAB 1
     @dash_app.callback(
         Output('graph-container', 'children'),
         Output('graphDesc', 'children'),
@@ -352,7 +353,8 @@ def init_callbacks(dash_app):
 
         return dcc.Graph(className='main-graph-size', id="main-graph", figure=fig), graphDesc
 
-     # Displaying Flag Summary
+    # Displaying Flag Summary
+    # TAB 3
     @dash_app.callback(
         Output('summary-container', 'children'),
         Output('species-container-c', 'style'),
@@ -451,6 +453,7 @@ def init_callbacks(dash_app):
 
 
     # Updating Datatable
+    # TAB 2
     @dash_app.callback(
         Output('data-table-container','children'),
         Input('options-countries-b', 'value'),
@@ -478,7 +481,8 @@ def init_callbacks(dash_app):
         )
         return datatable
 
-    # Updating Datatable
+    # Updating Analyze Table
+    # TAB 4
     @dash_app.callback(
         Output('acc-table-container','children'),
         Input('options-countries-d', 'value'),
@@ -492,7 +496,19 @@ def init_callbacks(dash_app):
 
         #ensure years are in proper order
         df = df.sort_values("year")  
-    
+
+        #data = pd.read_csv('datasets/Difference_'+ species +'.csv')
+        #percent = 1 + (float(sys.argv[2]) * 0.01)
+        #myFile = open(species+"_output_"+ sys.argv[2]+".txt", "w")
+        #myFile.close()
+
+        #for i in data['difference']:
+        #    if i > float(percent):
+        #        #if the difference is higher than given percentage
+        #        #put into a txt file that lists all occurences of said conditional
+        #        output.append("{} {} {}".format(data['country'][j], data['year'][j], data['population'][j]))
+        #    j+=1
+        
         # Rendering the data table
         cols = [{"name": i, "id": i,"hideable":True} for i in df.columns]
         cols[0] = {"name": "ID", "id": cols[0]["id"],"hideable":True}
