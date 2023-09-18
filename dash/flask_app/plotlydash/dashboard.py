@@ -486,27 +486,46 @@ def init_callbacks(dash_app):
     @dash_app.callback(
         Output('acc-table-container','children'),
         Input('options-countries-d', 'value'),
-        Input('options-species-d', 'value')
+        Input('options-species-d', 'value'),
+        Input('options-percent-d', 'value')
     )
-    def render_table(country,species):
+    def render_table(country,species,percent):
         
         # Filtering the dataframe to only include specific species/countries
-        df = filterdf(country,'country',DATAFRAME)        
-        df = filterdf(species,'species',df)
+        #df = filterdf(country,'country',DATAFRAME)        
+        df = filterdf(species,'species',DATAFRAME)
 
         #ensure years are in proper order
-        df = df.sort_values("year")  
+        df = df.sort_values(["country","year"])
+
+        newdf = pd.DataFrame()
+        newdf.drop(newdf.index , inplace=True)
+
+        k = 0
+        for j in df['population']:
+            if(k != 0):
+                if(df['country'].iloc[k] == df['country'].iloc[k-1]): # if countries are the same
+                    if(df['population'].iloc[k-1] != 0): # if not the first year of said country
+                        diff = ((df['population'].iloc[k] - df['population'].iloc[k-1]) / df['population'].iloc[k-1]) * 100
+
+                        if diff < 0:
+                            diff = diff * -1
+                        if diff > percent:
+                            newdf = newdf.append(df.iloc[k], ignore_index=True)
+
+            k+=1
         
         # Rendering the data table
-        cols = [{"name": i, "id": i,"hideable":True} for i in df.columns]
+        cols = [{"name": i, "id": i,"hideable":True} for i in newdf.columns]
         cols[0] = {"name": "ID", "id": cols[0]["id"],"hideable":True}
         datatable = dash_table.DataTable(
-            data=df.to_dict('records'),
+            data=newdf.to_dict('records'),
             columns=cols,
             export_format="csv",
             style_cell={
             'textAlign':'left',
-            'font-family':'sans-serif'}
+            'font-family':'sans-serif'},
+            style_table={'overflowY': 'scroll'}
         )
         return datatable
 
