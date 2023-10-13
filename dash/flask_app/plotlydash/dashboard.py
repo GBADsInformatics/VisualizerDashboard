@@ -194,19 +194,18 @@ def init_callbacks(dash_app):
         Input('options-countries-a', 'value'),
         Input('options-countries-b', 'value'),
         Input('options-countries-c', 'value'),
-        Input('options-countries-d', 'value'),
         Input('options-species-a', 'value'),
         Input('options-species-b', 'value'),
         Input('options-species-c', 'value'),
         Input('options-species-d', 'value'),
     )
-    def update_stored_options_a(tab, drop1a, drop1b, drop1c, drop1d, drop2a, drop2b, drop2c, drop2d):
+    def update_stored_options_a(tab, drop1a, drop1b, drop1c, drop2a, drop2b, drop2c, drop2d):
         if tab == 'tab-2':
             return {'options-country':drop1b,'options-species':drop2b}
         elif tab == 'tab-3':
             return {'options-country':drop1c,'options-species':drop2c}
         elif tab == 'tab-4':
-            return {'options-country':drop1d,'options-species':drop2d}
+            return {'options-country':drop1a,'options-species':drop2d} #Since tab 4 does not have country option, return other country option
         else:
             return {'options-country':drop1a,'options-species':drop2a}
 
@@ -216,7 +215,6 @@ def init_callbacks(dash_app):
         Output('options-countries-a', 'value'),
         Output('options-countries-b', 'value'),
         Output('options-countries-c', 'value'),
-        Output('options-countries-d', 'value'),
         Output('options-species-a', 'value'),
         Output('options-species-b', 'value'),
         Output('options-species-c', 'value'),
@@ -227,8 +225,8 @@ def init_callbacks(dash_app):
     )
     def options_on_tab_change(selected_tab,stored_options):
         if stored_options is None:
-            return COUNTRIES[0], COUNTRIES[0], COUNTRIES[0], COUNTRIES[0], SPECIES[0], SPECIES[0], SPECIES[0], SPECIES[0], "Country"
-        return stored_options['options-country'],stored_options['options-country'],stored_options['options-country'],stored_options['options-country'], \
+            return COUNTRIES[0], COUNTRIES[0], COUNTRIES[0], SPECIES[0], SPECIES[0], SPECIES[0], SPECIES[0], "Country"
+        return stored_options['options-country'],stored_options['options-country'],stored_options['options-country'], \
             stored_options['options-species'],stored_options['options-species'], stored_options['options-species'], stored_options['options-species'], "Country"
 
 
@@ -241,13 +239,12 @@ def init_callbacks(dash_app):
         Output('options-countries-c', 'options'),
         Output('options-species-c', 'options'),
         Output('options-choice-c', 'options'),
-        Output('options-countries-d', 'options'),
         Output('options-species-d', 'options'),
         Input('dummy_div', 'children'),
     )
     def dropdown_options(_a):
         # Return applicable options
-        return COUNTRIES,SPECIES,COUNTRIES,SPECIES,COUNTRIES,SPECIES,['Country', 'Species'],COUNTRIES,SPECIES
+        return COUNTRIES,SPECIES,COUNTRIES,SPECIES,COUNTRIES,SPECIES,['Country', 'Species'],SPECIES
 
     # Displaying graph
     # TAB 1
@@ -485,11 +482,10 @@ def init_callbacks(dash_app):
     # TAB 4
     @dash_app.callback(
         Output('acc-table-container','children'),
-        Input('options-countries-d', 'value'),
         Input('options-species-d', 'value'),
         Input('options-percent-d', 'value')
     )
-    def render_table(country,species,percent):
+    def render_table(species,percent):
         
         # Filtering the dataframe to only include specific species/countries
         #df = filterdf(country,'country',DATAFRAME)        
@@ -498,7 +494,7 @@ def init_callbacks(dash_app):
         #ensure years are in proper order
         df = df.sort_values(["country","year"])
 
-        newdf = pd.DataFrame()
+        newdf = pd.DataFrame(columns=df.columns)
         newdf.drop(newdf.index , inplace=True)
 
         k = 0
@@ -514,8 +510,9 @@ def init_callbacks(dash_app):
                             newdf = newdf.append(df.iloc[k], ignore_index=True)
 
             k+=1
-        
+
         # Rendering the data table
+
         cols = [{"name": i, "id": i,"hideable":True} for i in newdf.columns]
         cols[0] = {"name": "ID", "id": cols[0]["id"],"hideable":True}
         datatable = dash_table.DataTable(

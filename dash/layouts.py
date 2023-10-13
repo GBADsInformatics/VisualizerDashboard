@@ -267,12 +267,7 @@ page_1 = html.Div([
                                             children=[
                                                 html.H4("Options",style={"text-align":"center"}),
                                                 html.Hr(),
-                                                html.H5("Country",style={"margin":"0.4rem 0 0.2rem 0"}),
-                                                dcc.Dropdown(
-                                                    id='options-countries-d',
-                                                    clearable=False,
-                                                    multi=False,
-                                                ),html.Div(
+                                                html.Div(
                                                     id='species-container-d',
                                                     children=[
                                                         html.H5("Species",style={"margin":"0.4rem 0 0.2rem 0"}),
