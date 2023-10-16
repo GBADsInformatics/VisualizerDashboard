@@ -515,6 +515,8 @@ def init_callbacks(dash_app):
 
         cols = [{"name": i, "id": i,"hideable":True} for i in newdf.columns]
         cols[0] = {"name": "ID", "id": cols[0]["id"],"hideable":True}
+
+
         datatable = dash_table.DataTable(
             data=newdf.to_dict('records'),
             columns=cols,
@@ -522,7 +524,7 @@ def init_callbacks(dash_app):
             style_cell={
             'textAlign':'left',
             'font-family':'sans-serif'},
-            style_table={'overflowY': 'scroll'}
+            style_table={'height': '600px', 'overflowY': 'auto'}
         )
         return datatable
 
