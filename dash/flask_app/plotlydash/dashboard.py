@@ -194,18 +194,19 @@ def init_callbacks(dash_app):
         Input('options-countries-a', 'value'),
         Input('options-countries-b', 'value'),
         Input('options-countries-c', 'value'),
+        Input('options-countries-d', 'value'),
         Input('options-species-a', 'value'),
         Input('options-species-b', 'value'),
         Input('options-species-c', 'value'),
         Input('options-species-d', 'value'),
     )
-    def update_stored_options_a(tab, drop1a, drop1b, drop1c, drop2a, drop2b, drop2c, drop2d):
+    def update_stored_options_a(tab, drop1a, drop1b, drop1c, drop1d, drop2a, drop2b, drop2c, drop2d):
         if tab == 'tab-2':
             return {'options-country':drop1b,'options-species':drop2b}
         elif tab == 'tab-3':
             return {'options-country':drop1c,'options-species':drop2c}
         elif tab == 'tab-4':
-            return {'options-country':drop1a,'options-species':drop2d} #Since tab 4 does not have country option, return other country option
+            return {'options-country':drop1d,'options-species':drop2d} 
         else:
             return {'options-country':drop1a,'options-species':drop2a}
 
@@ -215,19 +216,21 @@ def init_callbacks(dash_app):
         Output('options-countries-a', 'value'),
         Output('options-countries-b', 'value'),
         Output('options-countries-c', 'value'),
+        Output('options-countries-d', 'value'),
         Output('options-species-a', 'value'),
         Output('options-species-b', 'value'),
         Output('options-species-c', 'value'),
         Output('options-species-d', 'value'),
         Output('options-choice-c', 'value'),
+        Output('options-choice-d', 'value'),
         [Input('tabs', 'value')],
         State('stored-options', 'data'),
     )
     def options_on_tab_change(selected_tab,stored_options):
         if stored_options is None:
-            return COUNTRIES[0], COUNTRIES[0], COUNTRIES[0], SPECIES[0], SPECIES[0], SPECIES[0], SPECIES[0], "Country"
-        return stored_options['options-country'],stored_options['options-country'],stored_options['options-country'], \
-            stored_options['options-species'],stored_options['options-species'], stored_options['options-species'], stored_options['options-species'], "Country"
+            return COUNTRIES[0], COUNTRIES[0], COUNTRIES[0], COUNTRIES[0], SPECIES[0], SPECIES[0], SPECIES[0], SPECIES[0], "Country", "Country"
+        return stored_options['options-country'],stored_options['options-country'],stored_options['options-country'],stored_options['options-country'], \
+            stored_options['options-species'],stored_options['options-species'], stored_options['options-species'], stored_options['options-species'], "Country", "Country"
 
 
     # Init dropdowns
@@ -239,12 +242,14 @@ def init_callbacks(dash_app):
         Output('options-countries-c', 'options'),
         Output('options-species-c', 'options'),
         Output('options-choice-c', 'options'),
+        Output('options-choice-d', 'options'),
+        Output('options-countries-d', 'options'),
         Output('options-species-d', 'options'),
         Input('dummy_div', 'children'),
     )
     def dropdown_options(_a):
         # Return applicable options
-        return COUNTRIES,SPECIES,COUNTRIES,SPECIES,COUNTRIES,SPECIES,['Country', 'Species'],SPECIES
+        return COUNTRIES,SPECIES,COUNTRIES,SPECIES,COUNTRIES,SPECIES,['Country', 'Species'],['Country', 'Species'],COUNTRIES,SPECIES
 
     # Displaying graph
     # TAB 1
@@ -482,17 +487,36 @@ def init_callbacks(dash_app):
     # TAB 4
     @dash_app.callback(
         Output('acc-table-container','children'),
+        Output('species-container-d', 'style'),
+        Output('options-countries-d', 'style'),
+        Output('country-title-d', 'style'),
+        Input('options-countries-d', 'value'),
         Input('options-species-d', 'value'),
-        Input('options-percent-d', 'value')
+        Input('options-percent-d', 'value'),
+        Input('options-choice-d', 'value')
     )
-    def render_table(species,percent):
-        
+    def render_table(country,species,percent,choice):
         # Filtering the dataframe to only include specific species/countries
-        #df = filterdf(country,'country',DATAFRAME)        
-        df = filterdf(species,'species',DATAFRAME)
-
+        # Filter the dataframe according to user's option selections
+        sortChoice = 'species'
+        styleC = {'display': 'block'}
+        styleS = {'display': 'block'}
+        styleTitle={"margin":"0.4rem 0 0.2rem 0", 'display': 'block'}
+        if(choice == 'Country'):
+            df = filterdf(country,'country',DATAFRAME)
+            styleS = {'display': 'none'}
+            styleC = {'display': 'block'}
+            styleTitle={"margin":"0.4rem 0 0.2rem 0", 'display': 'block'}
+            sortChoice = 'species'
+        else:
+            df = filterdf(species,'species',DATAFRAME)
+            styleS = {'display': 'block'}
+            styleC = {'display': 'none'}
+            styleTitle={"margin":"0.4rem 0 0.2rem 0", 'display': 'none'}
+            sortChoice = 'country'
+        
         #ensure years are in proper order
-        df = df.sort_values(["country","year"])
+        df = df.sort_values([sortChoice,"year"])
 
         newdf = pd.DataFrame(columns=df.columns)
         newdf.drop(newdf.index , inplace=True)
@@ -500,7 +524,7 @@ def init_callbacks(dash_app):
         k = 0
         for j in df['population']:
             if(k != 0):
-                if(df['country'].iloc[k] == df['country'].iloc[k-1]): # if countries are the same
+                if(df[sortChoice].iloc[k] == df[sortChoice].iloc[k-1]): # if countries are the same
                     if(df['population'].iloc[k-1] != 0): # if not the first year of said country
                         diff = ((df['population'].iloc[k] - df['population'].iloc[k-1]) / df['population'].iloc[k-1]) * 100
 
@@ -526,7 +550,7 @@ def init_callbacks(dash_app):
             'font-family':'sans-serif'},
             style_table={'height': '600px', 'overflowY': 'auto'}
         )
-        return datatable
+        return datatable, styleS, styleC, styleTitle
 
     # Updating Alert
     @dash_app.callback(

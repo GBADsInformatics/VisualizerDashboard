@@ -266,8 +266,24 @@ page_1 = html.Div([
                                         html.Div(
                                             children=[
                                                 html.H4("Options",style={"text-align":"center"}),
-                                                html.Hr(),
                                                 html.Div(
+                                                    id='choice-container-d',
+                                                    children=[
+                                                        html.H5("Country or Species",style={"margin":"0.4rem 0 0.2rem 0"}),
+                                                        dcc.Dropdown(
+                                                            id='options-choice-d',
+                                                            clearable=False,
+                                                            multi=False,
+                                                        )
+                                                    ],
+                                                ),
+                                                html.H5("Country", id='country-title-d',style={"margin":"0.4rem 0 0.2rem 0", 'display': 'block'}),
+                                                dcc.Dropdown(
+                                                    id='options-countries-d',
+                                                    clearable=False,
+                                                    multi=False,
+                                                    style={'display': 'block'},
+                                                ),html.Div(
                                                     id='species-container-d',
                                                     children=[
                                                         html.H5("Species",style={"margin":"0.4rem 0 0.2rem 0"}),
@@ -277,6 +293,7 @@ page_1 = html.Div([
                                                             multi=False,
                                                         )
                                                     ],
+                                                    style={'display': 'block'},
                                                 ),
                                                 html.Div(
                                                     id='percentage-container-d',
