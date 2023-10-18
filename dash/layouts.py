@@ -133,7 +133,7 @@ page_1 = html.Div([
                     ],  
                 ),
                 dcc.Tab(
-                    label='Raw Table', 
+                    label='Raw Data', 
                     style=tab_style,
                     selected_style=selectedTabStyle,
                     children=[
@@ -187,7 +187,7 @@ page_1 = html.Div([
                     ],  
                 ),
                 dcc.Tab(
-                    label='Flag Summary', 
+                    label='Flag Occurances', 
                     style=tab_style,
                     selected_style=selectedTabStyle,
                     children=[
@@ -253,7 +253,7 @@ page_1 = html.Div([
                     ],  
                 ),
                 dcc.Tab(
-                    label='Accuracy Table', 
+                    label='Irregularity Spotter', 
                     style=tab_style,
                     selected_style=selectedTabStyle,
                     children=[
