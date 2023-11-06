@@ -255,7 +255,6 @@ def init_callbacks(dash_app):
     # TAB 1
     @dash_app.callback(
         Output('graph-container', 'children'),
-        Output('graphDesc', 'children'),
         Input('options-countries-a', 'value'),
         Input('options-species-a', 'value')
     )
@@ -353,7 +352,7 @@ def init_callbacks(dash_app):
         fig.layout.autosize = True
 
 
-        return dcc.Graph(className='main-graph-size', id="main-graph", figure=fig), graphDesc
+        return dcc.Graph(className='main-graph-size', id="main-graph", figure=fig)
 
     # Displaying Flag Summary
     # TAB 3

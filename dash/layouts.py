@@ -75,7 +75,7 @@ page_1 = html.Div([
                             id='graphDesc',
                             className='tab-section',
                             children=[
-                                html.P('This section will display the most frequent flag in the graph displayed to assist with data analysis.',style={'margin-bottom':'0'})
+                                html.P('Select any combination of Species/Country to display their yearly population along with each associated Flag.',style={'margin-bottom':'0'})
                             ]
                         ),
                         html.Div(
