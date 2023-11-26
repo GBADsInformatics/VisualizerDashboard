@@ -32,7 +32,7 @@ from textwrap import dedent
 pd.options.mode.chained_assignment = None  
 
 # dash base url
-DASH_BASE_URL = env.get('DASH_BASE_URL','/dash')
+DASH_BASE_URL = env.get('BASE_URL','/dash')
 
 # Importing dataset
 DATAFRAME = pd.read_csv('datasets/Faostat_Data.csv')
