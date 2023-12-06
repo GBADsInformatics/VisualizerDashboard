@@ -520,7 +520,9 @@ def init_callbacks(dash_app):
         newdf = pd.DataFrame(columns=df.columns)
         newdf.drop(newdf.index , inplace=True)
 
+        newdf.insert(3, 'previous year population', np.nan)
         k = 0
+        l = 0
         for j in df['population']:
             if(k != 0):
                 if(df[sortChoice].iloc[k] == df[sortChoice].iloc[k-1]): # if countries are the same
@@ -531,8 +533,11 @@ def init_callbacks(dash_app):
                             diff = diff * -1
                         if diff > percent:
                             newdf = newdf.append(df.iloc[k], ignore_index=True)
-
+                            newdf.loc[l, 'previous year population'] = df['population'].iloc[k-1]
+                            l+=1
             k+=1
+
+
 
         # Rendering the data table
 
@@ -549,6 +554,15 @@ def init_callbacks(dash_app):
             'font-family':'sans-serif'},
             style_table={'height': '600px', 'overflowY': 'auto'}
         )
+
+        df = DATAFRAME
+        df = df.drop(df[df['species'] == 'Chickens'].index)
+        df = df.drop(df[df['species'] == 'Ducks'].index)
+        df = df.drop(df[df['species'] == 'Geese and guinea fowls'].index)
+        df = df.drop(df[df['species'] == 'Turkeys'].index)
+        df = df.sort_values(["country","species","year"])
+        k = 0
+
         return datatable, styleS, styleC, styleTitle
 
     # Updating Alert
