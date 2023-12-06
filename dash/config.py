@@ -22,7 +22,7 @@ class Config:
     FLASK_ENV = environ.get("FLASK_ENV","production")
     # SECRET_KEY = environ.get("SECRET_KEY")
 
-    DASH_BASE_URL = environ.get('DASH_BASE_URL','/dash')
+    DASH_BASE_URL = environ.get('BASE_URL','/dash')
     AUTH0_CALLBACK_URL = environ.get('AUTH0_CALLBACK_URL',DASH_BASE_URL+"/callback")
     # AUTH0_CLIENT_ID = environ.get('AUTH0_CLIENT_ID', None)
     # AUTH0_CLIENT_SECRET = environ.get('AUTH0_CLIENT_SECRET', None)

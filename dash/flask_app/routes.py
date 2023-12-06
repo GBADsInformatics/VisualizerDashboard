@@ -25,7 +25,7 @@ from authlib.integrations.flask_client import OAuth
 app.secret_key = env.get('SECRET_KEY',"randomstringofcharacters")
 app.debug = env.get('DEBUG','false').lower() in ('true', '1', 't')
 
-DASH_BASE_URL = env.get('DASH_BASE_URL','/dash')
+DASH_BASE_URL = env.get('BASE_URL','/dash')
 
 AUTH0_CALLBACK_URL = env.get('AUTH0_CALLBACK_URL', DASH_BASE_URL+"/")
 AUTH0_CLIENT_ID = env.get('AUTH0_CLIENT_ID', None)
