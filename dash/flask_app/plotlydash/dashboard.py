@@ -555,14 +555,6 @@ def init_callbacks(dash_app):
             style_table={'height': '600px', 'overflowY': 'auto'}
         )
 
-        df = DATAFRAME
-        df = df.drop(df[df['species'] == 'Chickens'].index)
-        df = df.drop(df[df['species'] == 'Ducks'].index)
-        df = df.drop(df[df['species'] == 'Geese and guinea fowls'].index)
-        df = df.drop(df[df['species'] == 'Turkeys'].index)
-        df = df.sort_values(["country","species","year"])
-        k = 0
-
         return datatable, styleS, styleC, styleTitle
 
     # Updating Alert
