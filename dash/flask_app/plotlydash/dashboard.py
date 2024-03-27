@@ -273,16 +273,15 @@ def init_callbacks(dash_app):
         df = df.sort_values("year")  
         fig = None
         
-        df['colours'] = ['#43BCCD' if fl == ' ' else '#662E9B' if fl == 'F' else '#F1D302' if fl == 'Im' else '#FFFFFF' if fl == 'M' else '#EA3546' for fl in df['flag']]
-
+        df['colours'] = ['#43BCCD' if fl == 'A' else '#662E9B' if fl == 'E' else '#F1D302' if fl == 'I' else '#FFFFFF' if fl == 'M' else '#EA3546' for fl in df['flag']]
         colors = ['#43BCCD', '#662E9B', '#F1D302', '#EA3546', '#FFFFFF']
-        labels = ['Official', 'Forecasted', 'Imputed', 'Unofficial', 'Missing']
+        labels = ['Official', 'Estimated', 'Imputed', 'Non-FAO', 'Missing']
 
         fig = go.Figure() #Initialize plot
         fig.add_trace(go.Scatter(x=df['year'], y=df['population'], mode='lines+markers', name='', marker=dict(size=10, color=df['colours'], line=dict(width=2,
                                         color='DarkSlateGrey')), line=dict(color='black')))
         
-        df.loc[:, 'flag'] = df['flag'].replace([' ', 'F', 'Im', '*', 'M'], ['Official', 'Forecasted', 'Imputed', 'Unofficial', 'Missing'])
+        df.loc[:, 'flag'] = df['flag'].replace(['A', 'E', 'I', 'X', 'M'], ['Official', 'Estimated', 'Imputed', 'Non-FAO', 'Missing'])
         # Adding colours for legend
         for color, label in zip(colors, labels):
             if label in df['flag'].unique():
@@ -304,23 +303,23 @@ def init_callbacks(dash_app):
             else:
                 plotTitle = species + " Population by Year in " + country
 
-                df.loc[:, 'flag'] = df['flag'].replace(['Official', 'Forecasted', 'Imputed', 'Unofficial', 'Missing'],[' ', 'F', 'Im', '*', 'M'])
+                df.loc[:, 'flag'] = df['flag'].replace(['Official', 'Estimated', 'Imputed', 'Non-FAO', 'Missing'],['A', 'E', 'I', 'X', 'M'])
                 #Prepare the flag values to determine which one is most present in the current graph
                 counts = df['flag'].value_counts()
-                if 'F' in counts:
-                    fValue = (counts['F'] / len(df)) * 100
+                if 'E' in counts:
+                    fValue = (counts['E'] / len(df)) * 100
                 else:
                     fValue = 0
-                if ' ' in counts:
-                    oValue = (counts[' '] / len(df)) * 100
+                if 'A' in counts:
+                    oValue = (counts['A'] / len(df)) * 100
                 else:
                     oValue = 0
-                if '*' in counts:
-                    uValue = (counts['*'] / len(df)) * 100
+                if 'X' in counts:
+                    uValue = (counts['X'] / len(df)) * 100
                 else:
                     uValue = 0
-                if 'Im' in counts:
-                    iValue = (counts['Im'] / len(df)) * 100
+                if 'I' in counts:
+                    iValue = (counts['I'] / len(df)) * 100
                 else:
                     iValue = 0
 
@@ -328,11 +327,11 @@ def init_callbacks(dash_app):
                 highest = max(fValue,oValue,uValue,iValue)
                 
                 if fValue == highest:
-                    graphDesc = graphDesc + " Contains " +  f"{fValue:.2f}%" + " Forecasted Values."
+                    graphDesc = graphDesc + " Contains " +  f"{fValue:.2f}%" + " Estimated Values."
                 elif oValue == highest:
                     graphDesc = graphDesc + " Contains " +  f"{oValue:.2f}%" + " Official Values. "
                 elif uValue == highest:
-                    graphDesc = graphDesc + " Contains " +  f"{uValue:.2f}%" + " Unofficial Values."
+                    graphDesc = graphDesc + " Contains " +  f"{uValue:.2f}%" + " Non-FAO Values."
                 else:
                     graphDesc = graphDesc + " Contains " +  f"{iValue:.2f}%" + " Imputed Values. "
         else:
@@ -385,7 +384,7 @@ def init_callbacks(dash_app):
         fig = None
 
         #Alter dataframe for readability
-        df.loc[:, 'flag'] = df['flag'].replace([' ', 'F', 'Im', '*', 'M'], ['Official', 'Forecasted', 'Imputed', 'Unofficial', 'Missing'])
+        df.loc[:, 'flag'] = df['flag'].replace(['A', 'E', 'I', 'X', 'M'], ['Official', 'Estimated', 'Imputed', 'Non-FAO', 'Missing'])
 
         df_group = df.groupby(['year', 'flag']).size().reset_index(name='count')
         df_group['percent'] = df_group.groupby('year')['count'].apply(lambda x: x / x.sum() * 100).round(2)
@@ -401,11 +400,11 @@ def init_callbacks(dash_app):
                 for j, row in enumerate(df_yearS.iterrows()): #For each row in the year
                     if row[1]['flag'] == 'Official':
                         color = "#43BCCD"
-                    elif row[1]['flag'] == 'Forecasted':
+                    elif row[1]['flag'] == 'Estimated':
                         color = '#662E9B'
                     elif row[1]['flag'] == 'Imputed':
                         color = '#F1D302'
-                    elif row[1]['flag'] == 'Unofficial':
+                    elif row[1]['flag'] == 'Non-FAO':
                         color = '#EA3546'
                     else:
                         color = '#000000'

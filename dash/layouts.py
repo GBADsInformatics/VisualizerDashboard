@@ -298,13 +298,13 @@ page_1 = html.Div([
                                                 html.Div(
                                                     id='percentage-container-d',
                                                     children=[
-                                                        html.H5("Percentage Change",style={"margin":"0.4rem 0 0.2rem 0"}),
+                                                        html.H5("Percentage Differential",style={"margin":"0.4rem 0 0.2rem 0"}),
                                                         dcc.Slider(
                                                             id='options-percent-d',
-                                                            min=0,
-                                                            max=100,
-                                                            step=5,
-                                                            value=50,
+                                                            min=50,
+                                                            max=150,
+                                                            step=10,
+                                                            value=100,
                                                         )
                                                     ],
                                                 ),
