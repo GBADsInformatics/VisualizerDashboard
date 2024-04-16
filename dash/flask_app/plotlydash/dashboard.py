@@ -36,6 +36,7 @@ DASH_BASE_URL = env.get('BASE_URL','/dash')
 
 # Importing dataset
 DATAFRAME = pd.read_csv('datasets/Faostat_Data.csv')
+FLAGSUM = pd.read_csv('datasets/Flag_Summary.csv')
 
 # Insert data cleaning here
 COUNTRIES = sorted(DATAFRAME['country'].unique())
@@ -485,6 +486,7 @@ def init_callbacks(dash_app):
     # TAB 4
     @dash_app.callback(
         Output('acc-table-container','children'),
+        Output('flag-table-container', 'children'),
         Output('species-container-d', 'style'),
         Output('options-countries-d', 'style'),
         Output('country-title-d', 'style'),
@@ -500,6 +502,7 @@ def init_callbacks(dash_app):
         styleC = {'display': 'block'}
         styleS = {'display': 'block'}
         styleTitle={"margin":"0.4rem 0 0.2rem 0", 'display': 'block'}
+
         if(choice == 'Country'):
             df = filterdf(country,'country',DATAFRAME)
             styleS = {'display': 'none'}
@@ -519,7 +522,10 @@ def init_callbacks(dash_app):
         newdf = pd.DataFrame(columns=df.columns)
         newdf.drop(newdf.index , inplace=True)
 
-        newdf.insert(3, 'previous year population', np.nan)
+        newdf.insert(5, 'previous year population', np.nan)
+        newdf.insert(6, 'previous year flag', np.nan)
+        newdf.insert(7, 'percent change', np.nan)
+
         k = 0
         l = 0
         for j in df['population']:
@@ -533,6 +539,8 @@ def init_callbacks(dash_app):
                         if diff > percent:
                             newdf = newdf.append(df.iloc[k], ignore_index=True)
                             newdf.loc[l, 'previous year population'] = df['population'].iloc[k-1]
+                            newdf.loc[l, 'previous year flag'] = df['flag'].iloc[k-1]
+                            newdf.loc[l, 'percent change'] = "{:.2f}".format((df['population'].iloc[k] - newdf.loc[l, 'previous year population']) / newdf.loc[l, 'previous year population'] * 100)
                             l+=1
             k+=1
 
@@ -554,7 +562,15 @@ def init_callbacks(dash_app):
             style_table={'height': '600px', 'overflowY': 'auto'}
         )
 
-        return datatable, styleS, styleC, styleTitle
+        flagtable = dash_table.DataTable(
+            data=FLAGSUM.to_dict('records'),
+            style_cell={
+            'textAlign':'left',
+            'font-family':'sans-serif'},
+            style_table={'height': '600px', 'overflowY': 'auto'}
+        )
+
+        return datatable, flagtable, styleS, styleC, styleTitle
 
     # Updating Alert
     @dash_app.callback(

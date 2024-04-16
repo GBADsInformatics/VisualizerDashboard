@@ -298,7 +298,7 @@ page_1 = html.Div([
                                                 html.Div(
                                                     id='percentage-container-d',
                                                     children=[
-                                                        html.H5("Percentage Differential",style={"margin":"0.4rem 0 0.2rem 0"}),
+                                                        html.H5("Differential Threshold by %",style={"margin":"0.4rem 0 0.2rem 0"}),
                                                         dcc.Slider(
                                                             id='options-percent-d',
                                                             min=50,
@@ -307,6 +307,20 @@ page_1 = html.Div([
                                                             value=100,
                                                         )
                                                     ],
+                                                ),
+                                                html.Div(
+                                                    id='flag-table-section',
+                                                    className='flag-section data-section',
+                                                    children=[
+                                                        html.H5("Flag Descriptions",style={"margin":"0.4rem 0 0.2rem 0"}),
+                                                        html.Div(
+                                                            id='flag-table-container',
+                                                            className='flag-table-container',
+                                                            children=[
+                                                                
+                                                            ]
+                                                        ),
+                                                    ]
                                                 ),
                                             ]
                                         ),
