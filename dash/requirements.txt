@@ -21,3 +21,5 @@ requests                  ==2.25.1
 urllib3                   ==1.26.3
 waitress                  ==1.2.0b2
 Werkzeug                  ==1.0.1
+boto3                     ==1.26.157
+cryptography
