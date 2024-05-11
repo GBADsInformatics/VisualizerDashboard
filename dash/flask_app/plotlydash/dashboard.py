@@ -682,7 +682,7 @@ def init_callbacks(dash_app):
             cur = conn.cursor()
             fieldstring = "created,tablename,subject,message,name,email,ispublic,reviewer"
             #change to not include time
-            querystring = f"dashboard='datastories' AND tablename LIKE 'National Cattle%'"
+            querystring = f"dashboard='visualizer' AND tablename LIKE '{country} {species}%'"
             querystr = rds.setQuery ("gbads_comments", fieldstring, querystring, "")
             comments = rds.execute ( cur, querystr )
             conn.close()
