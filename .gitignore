@@ -3,6 +3,7 @@
 .txt
 **/env/
 **/__pycache__/
+utils/*.conf
 
 *.vscode
 *.DS_Store

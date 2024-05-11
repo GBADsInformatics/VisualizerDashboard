@@ -16,6 +16,7 @@ import pandas as pd
 import numpy as np
 import json
 import plotly.express as px
+import comments_section
 # from dash_extensions.enrich import FileSystemStore
 
 #  IMAGES
@@ -125,6 +126,7 @@ page_1 = html.Div([
                                             parent_className='graph-container',
                                             children=[html.P('Please select appropriate dropdown options.')]
                                         ),
+                                        comments_section.comment_area,
                                     ]
                                 ),
 
