@@ -505,9 +505,10 @@ def init_callbacks(dash_app):
         Input('options-countries-d', 'value'),
         Input('options-species-d', 'value'),
         Input('options-percent-d', 'value'),
-        Input('options-choice-d', 'value')
+        Input('options-choice-d', 'value'),
+        Input('options-cutoff-d', 'value')
     )
-    def render_table(country,species,percent,choice):
+    def render_table(country,species,percent,choice,cutoff):
         # Filtering the dataframe to only include specific species/countries
         # Filter the dataframe according to user's option selections
         sortChoice = 'species'
@@ -527,6 +528,7 @@ def init_callbacks(dash_app):
             styleC = {'display': 'none'}
             styleTitle={"margin":"0.4rem 0 0.2rem 0", 'display': 'none'}
             sortChoice = 'country'
+
         
         #ensure years are in proper order
         df = df.sort_values([sortChoice,"year"])
@@ -546,14 +548,16 @@ def init_callbacks(dash_app):
                     if(df['population'].iloc[k-1] != 0): # if not the first year of said country
                         diff = ((df['population'].iloc[k] - df['population'].iloc[k-1]) / df['population'].iloc[k-1]) * 100
 
-                        if diff < 0:
-                            diff = diff * -1
-                        if diff > percent:
-                            newdf = newdf.append(df.iloc[k], ignore_index=True)
-                            newdf.loc[l, 'previous year population'] = df['population'].iloc[k-1]
-                            newdf.loc[l, 'previous year flag'] = df['flag'].iloc[k-1]
-                            newdf.loc[l, 'percent change'] = "{:.2f}".format((df['population'].iloc[k] - newdf.loc[l, 'previous year population']) / newdf.loc[l, 'previous year population'] * 100)
-                            l+=1
+                        if df['population'].iloc[k] > (cutoff * 1000000):
+                            if diff < 0:
+                                diff = diff * -1
+                        
+                            if diff > percent: #if difference is higher than the percentage threshold
+                                newdf = newdf.append(df.iloc[k], ignore_index=True)
+                                newdf.loc[l, 'previous year population'] = df['population'].iloc[k-1]
+                                newdf.loc[l, 'previous year flag'] = df['flag'].iloc[k-1]
+                                newdf.loc[l, 'percent change'] = "{:.2f}".format((df['population'].iloc[k] - newdf.loc[l, 'previous year population']) / newdf.loc[l, 'previous year population'] * 100)
+                                l+=1
             k+=1
 
 

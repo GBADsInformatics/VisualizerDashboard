@@ -1,6 +1,6 @@
 import dash_bootstrap_components as dbc
 from dash import html
-import dash_core_components as dcc
+from dash import dcc
 
 COMMENT_STYLE = {
     # "position": "fixed",
