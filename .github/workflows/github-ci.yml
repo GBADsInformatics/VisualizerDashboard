@@ -23,7 +23,7 @@ jobs:
       CONTEXT: ./dash
       DOCKERFILE: ./dash/Dockerfile
 
-aws:
+  aws:
     needs: [commit-hash, docker]
     uses: GBADsInformatics/DevopsWorkflows/.github/workflows/aws.yml@v2.0
     secrets:
