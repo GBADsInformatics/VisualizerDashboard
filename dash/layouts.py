@@ -311,6 +311,19 @@ page_1 = html.Div([
                                                     ],
                                                 ),
                                                 html.Div(
+                                                    id='cutoff-container-d',
+                                                    children=[
+                                                        html.H5("Population Threshold by 1,000,000s",style={"margin":"0.4rem 0 0.2rem 0"}),
+                                                        dcc.Slider(
+                                                            id='options-cutoff-d',
+                                                            min=0,
+                                                            max=10,
+                                                            step=1,
+                                                            value=0,
+                                                        )
+                                                    ],
+                                                ),
+                                                html.Div(
                                                     id='flag-table-section',
                                                     className='flag-section data-section',
                                                     children=[
